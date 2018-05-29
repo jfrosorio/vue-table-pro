@@ -1,5 +1,5 @@
 import {mount} from 'vue-test-utils'
-import Table from '../../src/components/Table.vue'
+import Table from '../../src/components/Vuetablepro.vue'
 import expect from 'expect'
 
 
