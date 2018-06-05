@@ -20,12 +20,15 @@
     "build": "npm run build:browser && npm run build:common",
     "build:browser": "cross-env NODE_ENV=production webpack --config config/webpack.config.browser.js --progress --hide-modules",
     "build:common": "cross-env NODE_ENV=production webpack --config config/webpack.config.common.js --progress --hide-modules",
+    "test": "jest",
     "prepublish": "npm run build"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.16",
     "babel-core": "^6.0.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.0.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.16.0",
     "cross-env": "^3.1.3",
@@ -36,12 +39,29 @@
     "eslint-plugin-html": "^1.6.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
+    "expect": "^23.1.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "jest": "^23.1.0",
     "node-sass": "^4.0.0",
     "sass-loader": "^4.1.0",
+    "vue": "^2.5.16",
+    "vue-jest": "^2.6.0",
     "vue-loader": "^10.0.0",
     "vue-template-compiler": "^2.1.6",
     "webpack": "^2.1.0-beta.28",
     "webpack-merge": "^1.1.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    }
   }
 }

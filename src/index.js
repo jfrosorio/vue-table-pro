@@ -1,4 +1,4 @@
-import Test from './components/Test.vue'
+import Test from './components/Table.vue'
 
 // Install the components
 export function install (Vue) {
