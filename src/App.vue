@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <VueTablePro />
+    <VueTablePro caption="hello" />
   </div>
 </template>
 

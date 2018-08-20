@@ -1,6 +1,6 @@
 <template>
   <table>
-    <caption v-if="caption">{{ caption }}</caption>
+    <caption>{{ caption }}</caption>
     <thead>
       <tr>
         <th v-for="header in headers" @click="headingClicked">{{ header }}</th>
@@ -18,7 +18,9 @@
   export default {
     name: 'Vue_table_pro',
     props: {
-      caption: 'hello',
+      caption: {
+         type: String
+      },
     },
     data () {
       return {
