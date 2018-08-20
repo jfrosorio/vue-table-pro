@@ -19,33 +19,15 @@
     name: 'Vue_table_pro',
     props: {
       caption: {
-         type: String
+        type: String
       },
+	  data: {
+        type: Array
+	  }
     },
     data () {
       return {
-        tableData: [
-          {
-            name: 'Lion',
-            age: 5,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 3,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 2,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 7,
-            weight: 20,
-          },
-        ],
+        tableData: this.data,
         headers: [],
       }
     },

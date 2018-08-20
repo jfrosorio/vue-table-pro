@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <VueTablePro caption="hello" />
+    <VueTablePro :caption = title :data = myData />
   </div>
 </template>
 
@@ -11,6 +11,33 @@ export default {
   name: 'app',
   components: {
     VueTablePro
+  },
+  data () {
+    return {
+      title: "hello",
+      myData: [
+          {
+            name: 'Lion',
+            age: 5,
+            weight: 20,
+          },
+          {
+            name: 'Lion',
+            age: 3,
+            weight: 20,
+          },
+          {
+            name: 'Lion',
+            age: 2,
+            weight: 20,
+          },
+          {
+            name: 'Lion',
+            age: 7,
+            weight: 20,
+          },
+        ]
+	  }
   }
 }
 </script>
