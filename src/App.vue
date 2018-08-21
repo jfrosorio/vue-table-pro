@@ -14,30 +14,30 @@ export default {
   },
   data () {
     return {
-      title: "hello",
+      title: 'hello',
       myData: [
-          {
-            name: 'Lion',
-            age: 5,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 3,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 2,
-            weight: 20,
-          },
-          {
-            name: 'Lion',
-            age: 7,
-            weight: 20,
-          },
-        ]
-	  }
+        {
+          name: 'Lion',
+          age: 5,
+          weight: 30
+        },
+        {
+          name: 'Tiger',
+          age: 3,
+          weight: 40
+        },
+        {
+          name: 'Bear',
+          age: 2,
+          weight: 50
+        },
+        {
+          name: 'Dolphin',
+          age: 7,
+          weight: 10
+        }
+      ]
+    }
   }
 }
 </script>
