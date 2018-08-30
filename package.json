@@ -4,11 +4,17 @@
   "private": true,
   "author": "José Osório",
   "main": "./dist/VueTablePro.common.js",
-  "files": ["dist/*", "src/*", "public/*", "*.json", "*.js"],
+  "files": [
+    "dist/*",
+    "src/*",
+    "public/*",
+    "*.json",
+    "*.js"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-	"build-bundle": "vue-cli-service build --target lib --name VueTablePro ./src/components/index.js",
+    "build-bundle": "vue-cli-service build --target lib --name VueTablePro ./src/components/index.js",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },

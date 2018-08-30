@@ -15,11 +15,21 @@ export default {
   data () {
     return {
       title: 'hello',
-      myData: [
+      mapping: {
+        name: 'Nome',
+      },
+      headers: [
+        'name'
+      ],
+      expandables: [
+        'name'
+      ],
+      data: [
         {
           name: 'Lion',
           age: 5,
-          weight: 30
+          weight: 30,
+          size: 100
         },
         {
           name: 'Tiger',
