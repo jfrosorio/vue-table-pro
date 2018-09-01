@@ -1,6 +1,6 @@
 <template>
   <table>
-    <caption>{{ caption }}</caption>
+    <caption>{{ tableTitle }}</caption>
     <thead>
       <tr>
         <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
@@ -18,24 +18,17 @@
 export default {
   name: 'Vue_table_pro',
   props: {
-    caption: {
-      type: String
-    },
-    data: {
-      type: Array,
-      required: true
-    },
-    myHeaders: {
-      type: Array,
+    config: {
+      type: Object,
       required: true
     }
   },
   data () {
     return {
-      tableData: this.data,
+      tableTitle: this.config.title || 'Table Title',
+      tableData: this.config.data || [],
       showData: [],
-      expandableData: [],
-      tableHeaders: this.myHeaders
+      tableHeaders: this.config.headers || []
     }
   },
   methods: {
@@ -46,17 +39,34 @@ export default {
         }
         return acc;
       }, {})
+    },
+    addColumnsByHeader () {
+      this.tableData.forEach((entry) => {
+        Object.keys(entry).forEach((key) => {
+          if (this.tableHeaders.indexOf(key) === -1) {
+            const filtered = this.removeProperty(entry, key)
+            this.showData.push(filtered)
+          }
+        })
+      })
+    },
+    addAllCollumns () {
+      this.tableData.forEach((entry) => {
+        Object.keys(entry).forEach((key) => {
+          if (this.tableHeaders.indexOf(key) === -1) {
+            this.tableHeaders.push(key)
+          }
+        })
+      })
+      this.showData = this.tableData
     }
   },
   created () {
-    this.tableData.forEach((entry) => {
-      Object.keys(entry).forEach((key) => {
-        if (this.tableHeaders.indexOf(key) === -1) {
-          const filtered = this.removeProperty(entry, key)
-          this.showData.push(filtered)
-        }
-      })
-    })
+    if (this.tableHeaders.length) {
+      this.addColumnsByHeader()
+    } else {
+      this.addAllCollumns()
+    }
   }
 }
 </script>
