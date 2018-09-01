@@ -3,11 +3,11 @@
     <caption>{{ caption }}</caption>
     <thead>
       <tr>
-        <th v-for="(header, index) in headers" :key="index">{{ header }}</th>
+        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(entry, index) in tableData" :key="index">
+      <tr v-for="(entry, index) in showData" :key="index">
         <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
       </tr>
     </tbody>
@@ -24,21 +24,36 @@ export default {
     data: {
       type: Array,
       required: true
+    },
+    myHeaders: {
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
       tableData: this.data,
-      headers: []
+      showData: [],
+      expandableData: [],
+      tableHeaders: this.myHeaders
     }
   },
   methods: {
+    removeProperty (obj, property) {
+      return  Object.keys(obj).reduce((acc, key) => {
+        if (key !== property) {
+          return {...acc, [key]: obj[key]}
+        }
+        return acc;
+      }, {})
+    }
   },
-  mounted () {
+  created () {
     this.tableData.forEach((entry) => {
       Object.keys(entry).forEach((key) => {
-        if (this.headers.indexOf(key) === -1) {
-          this.headers.push(key)
+        if (this.tableHeaders.indexOf(key) === -1) {
+          const filtered = this.removeProperty(entry, key)
+          this.showData.push(filtered)
         }
       })
     })

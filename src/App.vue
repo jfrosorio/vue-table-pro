@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <VueTablePro :caption = title :data = myData />
+    <VueTablePro :caption = title :data = myData :myHeaders = myHeaders />
   </div>
 </template>
 
@@ -46,7 +46,9 @@ export default {
           age: 7,
           weight: 10
         }
-      ]
+      ],
+	  //Note: if headers are not defined we should show all.
+	  myHeaders: ['name', 'age']
     }
   }
 }
