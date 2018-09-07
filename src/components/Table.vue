@@ -1,13 +1,13 @@
 <template>
   <table>
-    <caption>{{ caption }}</caption>
+    <caption>{{ tableTitle }}</caption>
     <thead>
       <tr>
-        <th v-for="(header, index) in headers" :key="index">{{ header }}</th>
+        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(entry, index) in tableData" :key="index">
+      <tr v-for="(entry, index) in showData" :key="index">
         <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
       </tr>
     </tbody>
@@ -18,30 +18,55 @@
 export default {
   name: 'Vue_table_pro',
   props: {
-    caption: {
-      type: String
-    },
-    data: {
-      type: Array,
+    config: {
+      type: Object,
       required: true
     }
   },
   data () {
     return {
-      tableData: this.data,
-      headers: []
+      tableTitle: this.config.title || 'Table Title',
+      tableData: this.config.data || [],
+      showData: [],
+      tableHeaders: this.config.headers || []
     }
   },
   methods: {
-  },
-  mounted () {
-    this.tableData.forEach((entry) => {
-      Object.keys(entry).forEach((key) => {
-        if (this.headers.indexOf(key) === -1) {
-          this.headers.push(key)
+    removeProperty (obj, property) {
+      return  Object.keys(obj).reduce((acc, key) => {
+        if (key !== property) {
+          return {...acc, [key]: obj[key]}
         }
+        return acc;
+      }, {})
+    },
+    addColumnsByHeader () {
+      this.tableData.forEach((entry) => {
+        Object.keys(entry).forEach((key) => {
+          if (this.tableHeaders.indexOf(key) === -1) {
+            const filtered = this.removeProperty(entry, key)
+            this.showData.push(filtered)
+          }
+        })
       })
-    })
+    },
+    addAllCollumns () {
+      this.tableData.forEach((entry) => {
+        Object.keys(entry).forEach((key) => {
+          if (this.tableHeaders.indexOf(key) === -1) {
+            this.tableHeaders.push(key)
+          }
+        })
+      })
+      this.showData = this.tableData
+    }
+  },
+  created () {
+    if (this.tableHeaders.length) {
+      this.addColumnsByHeader()
+    } else {
+      this.addAllCollumns()
+    }
   }
 }
 </script>
