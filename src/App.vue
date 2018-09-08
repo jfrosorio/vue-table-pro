@@ -20,7 +20,6 @@ export default {
         data,
         headers: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
         pagination: {
-          enable: true,
           perPage: 15,
           size: 6
         }

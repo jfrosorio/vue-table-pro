@@ -14,12 +14,16 @@
       </tbody>
     </table>
 
-    <div class="vuetable__pagination" v-show="tablePagination.enable">
+    <div class="vuetable__pagination" v-show="tablePagination.enabled && tablePagination.isNecessary">
+      <a class="vuetable__pagination-page" @click="_updatePagination(tablePagination.first)" :class="_isCurrentPage(tablePagination.first)">
+        {{ tablePagination.first }}
+      </a>
+      <span class="vuetable__pagination-ellipsis" v-show="tablePagination.hasMoreUntilFirst">...</span>
       <a class="vuetable__pagination-page" @click="_updatePagination(page)" :class="_isCurrentPage(page)" v-for="page in tablePagination.navigationPages" :key="page">
         {{ page }}
       </a>
-      <span class="vuetable__pagination-ellipsis" v-show="tablePagination.hasLargeSize">...</span>
-      <a class="vuetable__pagination-page" v-show="tablePagination.hasLargeSize" @click="_updatePagination(tablePagination.last)" :class="_isCurrentPage(tablePagination.last)">
+      <span class="vuetable__pagination-ellipsis" v-show="tablePagination.hasMoreUntilLast">...</span>
+      <a class="vuetable__pagination-page" @click="_updatePagination(tablePagination.last)" :class="_isCurrentPage(tablePagination.last)">
         {{ tablePagination.last }}
       </a>
     </div>
@@ -42,12 +46,13 @@ export default {
       showData: [],
       tableHeaders: this.config.headers || [],
       tablePagination: {
+        first: 1,
         size: 5,
         paged: 1,
         currentPage: 1,
         perPage: 10,
-        enable: false,
-        settings: this.config.pagination || {}
+        enabled: true,
+        settings: this.config.pagination || null
       }
     }
   },
@@ -83,23 +88,27 @@ export default {
       const end = this.tablePagination.currentPage * this.tablePagination.perPage
       const start = end - this.tablePagination.perPage
 
-      this.showData = this.tablePagination.data.filter((entry, index) => {
+      this.showData = this.tablePagination.allShowData.filter((entry, index) => {
         return index >= start && index < end
       })
     },
     _loadPagination () {
-      this.tablePagination.data = this.showData
+      this.tablePagination.allShowData = this.showData
       this.tablePagination.total = this.showData.length
 
-      this.tablePagination.enable = this.tablePagination.settings.enable || this.tablePagination.enable
-      this.tablePagination.size = this.tablePagination.settings.size || this.tablePagination.size
-      this.tablePagination.navigationPages = Array.from({length: this.tablePagination.size}, (v, k) => k + 1)
+      this.tablePagination.enabled = this.tablePagination.settings !== null ? this.tablePagination.enabled : !this.tablePagination.enabled
+      this.tablePagination.size = this.tablePagination.settings.size ? this.tablePagination.settings.size - this.tablePagination.first : this.tablePagination.size
       this.tablePagination.perPage = this.tablePagination.settings.perPage || this.tablePagination.perPage
-      this.tablePagination.needsNavigation = this.tablePagination.total > this.tablePagination.perPage
-      this.tablePagination.last = this.tablePagination.needsNavigation ? this.tablePagination.total / this.tablePagination.perPage : null
-      this.tablePagination.hasLargeSize = this.tablePagination.total > this.tablePagination.perPage * this.tablePagination.size
+      this.tablePagination.isNecessary = this.tablePagination.total > this.tablePagination.perPage
 
-      if (this.tablePagination.needsNavigation && this.tablePagination.enable) {
+      this.tablePagination.needsMoreNavigation = this.tablePagination.total > this.tablePagination.perPage * this.tablePagination.size
+      this.tablePagination.hasMoreUntilLast = this.tablePagination.needsMoreNavigation
+      this.tablePagination.hasMoreUntilFirst = this.tablePagination.needsMoreNavigation && this.tablePagination.paged > 1
+      this.tablePagination.last = Math.ceil(this.tablePagination.total / this.tablePagination.perPage)
+      this.tablePagination.pagesLength = this.tablePagination.hasMoreUntilLast ? this.tablePagination.size - 1 : this.tablePagination.last - 2
+      this.tablePagination.navigationPages = Array.from({length: this.tablePagination.pagesLength}, (v, k) => k + 2)
+
+      if (this.tablePagination.isNecessary && this.tablePagination.enabled) {
         this._paginateTableData()
       }
     },
@@ -110,22 +119,70 @@ export default {
       this.tablePagination.currentPage = page
 
       const isFirstItemOfNav = this.tablePagination.currentPage === this.tablePagination.navigationPages[0]
-      const isLastItemOfNav = this.tablePagination.currentPage === this.tablePagination.navigationPages[this.tablePagination.size - 1]
+      const isFirstPage = this.tablePagination.currentPage === this.tablePagination.first
+      const isLastItemOfNav = this.tablePagination.currentPage === this.tablePagination.navigationPages[this.tablePagination.navigationPages.length - 1]
+      const isLastPage = this.tablePagination.currentPage === this.tablePagination.last
+      const remainingPages = this.tablePagination.last - this.tablePagination.currentPage
+      const madePagination = this.tablePagination.paged !== 1
 
-      if (this.tablePagination.needsNavigation) {
-        if (isFirstItemOfNav || this.tablePagination.currentPage + this.tablePagination.size < this.tablePagination.last) {
-          this.tablePagination.hasLargeSize = true
-        } else if (isLastItemOfNav && this.tablePagination.currentPage + this.tablePagination.size >= this.tablePagination.last) {
-          this.tablePagination.hasLargeSize = false
+      if (this.tablePagination.needsMoreNavigation) {
+        if (isFirstItemOfNav && this.tablePagination.currentPage <= this.tablePagination.size) {
+          this.tablePagination.hasMoreUntilFirst = false
+        } else if (isLastItemOfNav || this.tablePagination.currentPage > this.tablePagination.size) {
+          this.tablePagination.hasMoreUntilFirst = true
         }
-      }
 
-      if (isFirstItemOfNav && this.tablePagination.paged !== 1) {
-        this.tablePagination.navigationPages = this.tablePagination.navigationPages.map(page => page - (this.tablePagination.size - 1))
-        this.tablePagination.paged--
-      } else if (isLastItemOfNav && this.tablePagination.currentPage !== this.tablePagination.last) {
-        this.tablePagination.navigationPages = this.tablePagination.navigationPages.map(page => page + (this.tablePagination.size - 1))
-        this.tablePagination.paged++
+        if (isFirstItemOfNav || this.tablePagination.currentPage + this.tablePagination.size < this.tablePagination.last) {
+          this.tablePagination.hasMoreUntilLast = true
+        } else if (isLastItemOfNav && remainingPages < this.tablePagination.size) {
+          this.tablePagination.hasMoreUntilLast = false
+        }
+
+        if (isFirstItemOfNav && madePagination) {
+          let navLengthDifference = (this.tablePagination.size - 1) - this.tablePagination.navigationPages.length
+
+          if (navLengthDifference > 0) {
+            while (navLengthDifference) {
+              const lastPageIndex = this.tablePagination.navigationPages.length - 1
+              const lastNavPage = this.tablePagination.navigationPages[lastPageIndex]
+              const newLastPage = lastNavPage + 1
+              this.tablePagination.navigationPages.push(newLastPage)
+              navLengthDifference--
+            }
+          }
+
+          this.tablePagination.navigationPages = this.tablePagination.navigationPages.map(page => page - (this.tablePagination.size - 2))
+          this.tablePagination.paged--
+        }
+
+        if (isFirstPage) {
+          this.tablePagination.hasMoreUntilFirst = false
+          this.tablePagination.navigationPages = []
+          this.tablePagination.paged = 1
+
+          for (let index = this.tablePagination.first + 1; this.tablePagination.navigationPages.length < this.tablePagination.size - 1; index++) {
+            this.tablePagination.navigationPages.push(index)
+          }
+        }
+
+        if (isLastItemOfNav && this.tablePagination.currentPage < this.tablePagination.last - (this.tablePagination.size - 1)) {
+          this.tablePagination.navigationPages = this.tablePagination.navigationPages
+            .map(page => page + (this.tablePagination.size - 2))
+            .filter(page => page < this.tablePagination.last)
+          this.tablePagination.paged++
+        }
+
+        if (isLastPage) {
+          this.tablePagination.hasMoreUntilLast = false
+          this.tablePagination.navigationPages = []
+          this.tablePagination.paged = Math.round(this.tablePagination.last / (this.tablePagination.size - 1))
+
+          const lastPagesLength = this.tablePagination.size - 1
+
+          for (let index = this.tablePagination.last - 1; this.tablePagination.navigationPages.length < lastPagesLength; index--) {
+            this.tablePagination.navigationPages.unshift(index)
+          }
+        }
       }
 
       this._paginateTableData()
@@ -173,6 +230,7 @@ export default {
   /** Pagination **/
   .vuetable__pagination {
     margin: 20px auto;
+    user-select: none;
   }
 
   .vuetable__pagination-page {
