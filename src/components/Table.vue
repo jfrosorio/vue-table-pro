@@ -139,19 +139,22 @@ export default {
         }
 
         if (isFirstItemOfNav && madePagination) {
-          let navLengthDifference = (this.tablePagination.size - 1) - this.tablePagination.navigationPages.length
+          this.tablePagination.navigationPages = this.tablePagination.navigationPages.map(page => page - (this.tablePagination.size - 2)).filter(page => page > this.tablePagination.first)
+          const stepPagesLength = (this.tablePagination.size - 1)
 
-          if (navLengthDifference > 0) {
-            while (navLengthDifference) {
-              const lastPageIndex = this.tablePagination.navigationPages.length - 1
-              const lastNavPage = this.tablePagination.navigationPages[lastPageIndex]
-              const newLastPage = lastNavPage + 1
-              this.tablePagination.navigationPages.push(newLastPage)
-              navLengthDifference--
+          if (stepPagesLength !== this.tablePagination.navigationPages.length) {
+            let difference = stepPagesLength - this.tablePagination.navigationPages.length
+            const endingPoint = this.tablePagination.currentPage
+            const completePagesNavigation = []
+
+            while (difference) {
+              completePagesNavigation.unshift(endingPoint + difference)
+              difference--
             }
+
+            this.tablePagination.navigationPages = this.tablePagination.navigationPages.concat(completePagesNavigation)
           }
 
-          this.tablePagination.navigationPages = this.tablePagination.navigationPages.map(page => page - (this.tablePagination.size - 2))
           this.tablePagination.paged--
         }
 
@@ -165,17 +168,32 @@ export default {
           }
         }
 
-        if (isLastItemOfNav && this.tablePagination.currentPage < this.tablePagination.last - (this.tablePagination.size - 1)) {
-          this.tablePagination.navigationPages = this.tablePagination.navigationPages
-            .map(page => page + (this.tablePagination.size - 2))
-            .filter(page => page < this.tablePagination.last)
+        if (isLastItemOfNav) {
+          const startingPoint = this.tablePagination.currentPage
+          const endingPoint = startingPoint + (this.tablePagination.size - 1)
+          const pointsInterval = endingPoint - startingPoint
+
+          this.tablePagination.navigationPages = new Array(pointsInterval).fill().map((_, page) => page + startingPoint).filter(page => page < this.tablePagination.last)
+
+          if (pointsInterval !== this.tablePagination.navigationPages.length) {
+            let difference = pointsInterval - this.tablePagination.navigationPages.length
+            const completePagesNavigation = []
+
+            while (difference) {
+              completePagesNavigation.push(startingPoint - difference)
+              difference--
+            }
+
+            this.tablePagination.navigationPages = completePagesNavigation.concat(this.tablePagination.navigationPages)
+          }
+
           this.tablePagination.paged++
         }
 
-        if (isLastPage) {
+        if (isLastPage && this.tablePagination.hasMoreUntilLast) {
           this.tablePagination.hasMoreUntilLast = false
           this.tablePagination.navigationPages = []
-          this.tablePagination.paged = Math.round(this.tablePagination.last / (this.tablePagination.size - 1))
+          this.tablePagination.paged = Math.round(this.tablePagination.last / (this.tablePagination.size - 2))
 
           const lastPagesLength = this.tablePagination.size - 1
 
