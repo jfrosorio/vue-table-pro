@@ -32,28 +32,36 @@ export default {
       perPage: 10,
       enabled: true,
       isNecessary: false,
+      navigationPages: [],
       settings: this.config || null
     }
   },
   methods: {
     _paginateTableData () {
+      // Set paginated data limits
       const end = this.currentPage * this.perPage
       const start = end - this.perPage
 
+      // Build paginated data
       const paginatedData = this.allShowData.filter((entry, index) => {
         return index >= start && index < end
       })
+
+      // Serve paginated data
       this.$emit('pagination', paginatedData)
     },
     _loadPagination () {
+      // Get table data
       this.allShowData = this.$parent.showData
       this.total = this.$parent.showData.length
 
+      // Set pagination configuration defaults
       this.enabled = this.settings !== null ? this.enabled : !this.enabled
       this.size = this.settings.size ? this.settings.size - this.first : this.size
       this.perPage = this.settings.perPage || this.perPage
       this.isNecessary = this.total > this.perPage
 
+      // Set conditional pagination
       this.needsMoreNavigation = this.total > this.perPage * this.size
       this.hasMoreUntilLast = this.needsMoreNavigation
       this.hasMoreUntilFirst = this.needsMoreNavigation && this.paged > 1
@@ -68,91 +76,109 @@ export default {
     _isCurrentPage (page) {
       return page === this.currentPage ? 'vuetable__pagination-page--current' : ''
     },
+    _checkIfHasMoreUntilFirst () {
+      if (this.isFirstItemOfNav && this.currentPage <= this.size) {
+        this.hasMoreUntilFirst = false
+      } else if (this.isLastItemOfNav || this.currentPage > this.size) {
+        this.hasMoreUntilFirst = true
+      }
+    },
+    _checkIfHasMoreUntilLast () {
+      const remainingPages = this.last - this.currentPage
+
+      if (this.isFirstItemOfNav || this.currentPage + this.size < this.last) {
+        this.hasMoreUntilLast = true
+      } else if (this.isLastItemOfNav && remainingPages < this.size) {
+        this.hasMoreUntilLast = false
+      }
+    },
+    _navigateBack () {
+      this.navigationPages = this.navigationPages.map(page => page - (this.size - 2)).filter(page => page > this.first)
+      const stepPagesLength = (this.size - 1)
+
+      if (stepPagesLength !== this.navigationPages.length) {
+        let difference = stepPagesLength - this.navigationPages.length
+        const endingPoint = this.currentPage
+        const completePagesNavigation = []
+
+        while (difference) {
+          completePagesNavigation.unshift(endingPoint + difference)
+          difference--
+        }
+
+        this.navigationPages = this.navigationPages.concat(completePagesNavigation)
+      }
+
+      this.paged--
+    },
+    _goToFirstPage () {
+      this.hasMoreUntilFirst = false
+      this.navigationPages = []
+      this.paged = 1
+
+      for (let index = this.first + 1; this.navigationPages.length < this.size - 1; index++) {
+        this.navigationPages.push(index)
+      }
+    },
+    _navigateForwards () {
+      const startingPoint = this.currentPage
+      const endingPoint = startingPoint + (this.size - 1)
+      const pointsInterval = endingPoint - startingPoint
+
+      this.navigationPages = new Array(pointsInterval).fill().map((_, page) => page + startingPoint).filter(page => page < this.last)
+
+      if (pointsInterval !== this.navigationPages.length) {
+        let difference = pointsInterval - this.navigationPages.length
+        const completePagesNavigation = []
+
+        while (difference) {
+          completePagesNavigation.push(startingPoint - difference)
+          difference--
+        }
+
+        this.navigationPages = completePagesNavigation.concat(this.navigationPages)
+      }
+
+      this.paged++
+    },
+    _goToLastPage () {
+      this.hasMoreUntilLast = false
+      this.navigationPages = []
+      this.paged = Math.round(this.last / (this.size - 2))
+
+      const lastPagesLength = this.size - 1
+
+      for (let index = this.last - 1; this.navigationPages.length < lastPagesLength; index--) {
+        this.navigationPages.unshift(index)
+      }
+    },
     _updatePagination (page) {
       this.currentPage = page
+      this.isFirstItemOfNav = this.currentPage === this.navigationPages[0]
+      this.isLastItemOfNav = this.currentPage === this.navigationPages[this.navigationPages.length - 1]
 
-      const isFirstItemOfNav = this.currentPage === this.navigationPages[0]
       const isFirstPage = this.currentPage === this.first
-      const isLastItemOfNav = this.currentPage === this.navigationPages[this.navigationPages.length - 1]
       const isLastPage = this.currentPage === this.last
-      const remainingPages = this.last - this.currentPage
       const madePagination = this.paged !== 1
 
       if (this.needsMoreNavigation) {
-        if (isFirstItemOfNav && this.currentPage <= this.size) {
-          this.hasMoreUntilFirst = false
-        } else if (isLastItemOfNav || this.currentPage > this.size) {
-          this.hasMoreUntilFirst = true
-        }
+        this._checkIfHasMoreUntilFirst()
+        this._checkIfHasMoreUntilLast()
 
-        if (isFirstItemOfNav || this.currentPage + this.size < this.last) {
-          this.hasMoreUntilLast = true
-        } else if (isLastItemOfNav && remainingPages < this.size) {
-          this.hasMoreUntilLast = false
-        }
-
-        if (isFirstItemOfNav && madePagination) {
-          this.navigationPages = this.navigationPages.map(page => page - (this.size - 2)).filter(page => page > this.first)
-          const stepPagesLength = (this.size - 1)
-
-          if (stepPagesLength !== this.navigationPages.length) {
-            let difference = stepPagesLength - this.navigationPages.length
-            const endingPoint = this.currentPage
-            const completePagesNavigation = []
-
-            while (difference) {
-              completePagesNavigation.unshift(endingPoint + difference)
-              difference--
-            }
-
-            this.navigationPages = this.navigationPages.concat(completePagesNavigation)
-          }
-
-          this.paged--
+        if (this.isFirstItemOfNav && madePagination) {
+          this._navigateBack()
         }
 
         if (isFirstPage) {
-          this.hasMoreUntilFirst = false
-          this.navigationPages = []
-          this.paged = 1
-
-          for (let index = this.first + 1; this.navigationPages.length < this.size - 1; index++) {
-            this.navigationPages.push(index)
-          }
+          this._goToFirstPage()
         }
 
-        if (isLastItemOfNav) {
-          const startingPoint = this.currentPage
-          const endingPoint = startingPoint + (this.size - 1)
-          const pointsInterval = endingPoint - startingPoint
-
-          this.navigationPages = new Array(pointsInterval).fill().map((_, page) => page + startingPoint).filter(page => page < this.last)
-
-          if (pointsInterval !== this.navigationPages.length) {
-            let difference = pointsInterval - this.navigationPages.length
-            const completePagesNavigation = []
-
-            while (difference) {
-              completePagesNavigation.push(startingPoint - difference)
-              difference--
-            }
-
-            this.navigationPages = completePagesNavigation.concat(this.navigationPages)
-          }
-
-          this.paged++
+        if (this.isLastItemOfNav) {
+          this._navigateForwards()
         }
 
         if (isLastPage && this.hasMoreUntilLast) {
-          this.hasMoreUntilLast = false
-          this.navigationPages = []
-          this.paged = Math.round(this.last / (this.size - 2))
-
-          const lastPagesLength = this.size - 1
-
-          for (let index = this.last - 1; this.navigationPages.length < lastPagesLength; index--) {
-            this.navigationPages.unshift(index)
-          }
+          this._goToLastPage()
         }
       }
 
