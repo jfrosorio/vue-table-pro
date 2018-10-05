@@ -6,7 +6,7 @@
 
 <script>
 import VueTablePro from './components/Table.vue'
-import data from './data/animals.js'
+import data from './data/cars'
 
 export default {
   name: 'app',
@@ -16,9 +16,13 @@ export default {
   data () {
     return {
       config: {
-        title: 'hello',
-        data: data.animals,
-        headers: ['name', 'weight']
+        title: 'Cars List',
+        data,
+        headers: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
+        pagination: {
+          perPage: 15,
+          size: 6
+        }
       }
     }
   }

@@ -1,20 +1,26 @@
 <template>
-  <table>
-    <caption>{{ tableTitle }}</caption>
-    <thead>
-      <tr>
-        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(entry, index) in showData" :key="index">
-        <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="vuetable">
+    <table>
+      <caption>{{ tableTitle }}</caption>
+      <thead>
+        <tr>
+          <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(entry, index) in showData" :key="index">
+          <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <TablePagination :config = this.tablePagination @pagination = "setShowData" />
+  </div>
 </template>
 
 <script>
+import TablePagination from '@/components/Table/TablePagination.vue'
+
 export default {
   name: 'Vue_table_pro',
   props: {
@@ -23,34 +29,37 @@ export default {
       required: true
     }
   },
+  components: {
+    TablePagination
+  },
   data () {
     return {
       tableTitle: this.config.title || 'Table Title',
       tableData: this.config.data || [],
       showData: [],
-      tableHeaders: this.config.headers || []
+      tableHeaders: this.config.headers || [],
+      tablePagination: this.config.pagination || null
     }
   },
   methods: {
-    removeProperty (obj, property) {
-      return  Object.keys(obj).reduce((acc, key) => {
-        if (key !== property) {
-          return {...acc, [key]: obj[key]}
-        }
-        return acc;
-      }, {})
-    },
-    addColumnsByHeader () {
-      this.tableData.forEach((entry) => {
-        Object.keys(entry).forEach((key) => {
-          if (this.tableHeaders.indexOf(key) === -1) {
-            const filtered = this.removeProperty(entry, key)
-            this.showData.push(filtered)
+    _addColumnsByHeader () {
+      this.tableData.forEach(entry => {
+        const rowEntry = {}
+
+        // Loop through each entry keys and check if
+        // they match any of the table headers
+        Object.keys(entry).forEach(key => {
+          if (this.tableHeaders.includes(key)) {
+            rowEntry[key] = entry[key]
           }
         })
+
+        if (Object.keys(rowEntry).length) {
+          this.showData.push(rowEntry)
+        }
       })
     },
-    addAllCollumns () {
+    _addAllCollumns () {
       this.tableData.forEach((entry) => {
         Object.keys(entry).forEach((key) => {
           if (this.tableHeaders.indexOf(key) === -1) {
@@ -59,13 +68,16 @@ export default {
         })
       })
       this.showData = this.tableData
+    },
+    setShowData (data) {
+      this.showData = data
     }
   },
   created () {
     if (this.tableHeaders.length) {
-      this.addColumnsByHeader()
+      this._addColumnsByHeader()
     } else {
-      this.addAllCollumns()
+      this._addAllCollumns()
     }
   }
 }
