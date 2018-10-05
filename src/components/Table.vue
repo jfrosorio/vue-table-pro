@@ -14,12 +14,12 @@
       </tbody>
     </table>
 
-    <TablePagination :config = this.tablePagination @pagination = "setShowData" />
+    <Pagination :config = this.Pagination @pagination = "setShowData" />
   </div>
 </template>
 
 <script>
-import TablePagination from '@/components/Table/TablePagination.vue'
+import Pagination from '@/components/Features/Pagination.vue'
 
 export default {
   name: 'Vue_table_pro',
@@ -30,15 +30,15 @@ export default {
     }
   },
   components: {
-    TablePagination
+    Pagination
   },
   data () {
     return {
-      tableTitle: this.config.title || 'Table Title',
+      tableTitle: this.config.title || 'Features Title',
       tableData: this.config.data || [],
       showData: [],
       tableHeaders: this.config.headers || [],
-      tablePagination: this.config.pagination || null
+      Pagination: this.config.pagination || null
     }
   },
   methods: {
