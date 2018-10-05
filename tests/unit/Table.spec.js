@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import VueTablePro from '@/components/Table.vue'
+import VueTablePro from '@/components/Features.vue'
 
 describe('Tests for base table', () => {
   let wrapper
