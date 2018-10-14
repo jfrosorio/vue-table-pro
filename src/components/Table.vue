@@ -9,12 +9,14 @@
       </thead>
       <tbody>
         <tr v-for="(entry, index) in showData" :key="index">
-          <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
+          <td v-for="(property, index) in entry" :key="index">
+            <slot :name="property">{{ property }}</slot>
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <Pagination :config = this.Pagination @pagination = "setShowData" />
+    <Pagination :config = this.pagination @pagination = "_setShowData" />
   </div>
 </template>
 
@@ -38,7 +40,8 @@ export default {
       tableData: this.config.data || [],
       showData: [],
       tableHeaders: this.config.headers || [],
-      Pagination: this.config.pagination || null
+      pagination: this.config.pagination || null,
+      extraColumns: this.config.extraColumns || []
     }
   },
   methods: {
@@ -69,7 +72,18 @@ export default {
       })
       this.showData = this.tableData
     },
-    setShowData (data) {
+    _addExtraColumns () {
+      this.extraColumns.forEach((extraCol, key) => {
+        if (extraCol) {
+          this.tableHeaders.push(extraCol)
+          this.showData.forEach(entry => {
+            const colKey = `extraCol${key}`
+            entry[colKey] = extraCol
+          })
+        }
+      })
+    },
+    _setShowData (data) {
       this.showData = data
     }
   },
@@ -78,6 +92,10 @@ export default {
       this._addColumnsByHeader()
     } else {
       this._addAllCollumns()
+    }
+
+    if (this.extraColumns.length) {
+      this._addExtraColumns()
     }
   }
 }

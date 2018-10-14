@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <VueTablePro :config = config />
+    <VueTablePro :config = config>
+      <a slot-scope="extraCol" slot="edit_row">Edit</a>
+      <a slot-scope="extraCol" slot="delete_row">Delete</a>
+    </VueTablePro>
   </div>
 </template>
 
@@ -22,7 +25,8 @@ export default {
         pagination: {
           perPage: 15,
           size: 6
-        }
+        },
+        extraColumns: ['edit_row', 'delete_row']
       }
     }
   }
