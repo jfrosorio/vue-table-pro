@@ -4,7 +4,8 @@
       {{ first }}
     </a>
     <span class="vuetable__pagination-ellipsis" v-show="hasMoreUntilFirst">...</span>
-    <a class="vuetable__pagination-page" @click="_updatePagination(page)" :class="_isCurrentPage(page)" v-for="page in navigationPages" :key="page">
+    <a class="vuetable__pagination-page" @click="_updatePagination(page)" :class="_isCurrentPage(page)"
+       v-for="page in navigationPages" :key="page">
       {{ page }}
     </a>
     <span class="vuetable__pagination-ellipsis" v-show="hasMoreUntilLast">...</span>

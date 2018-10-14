@@ -1,28 +1,38 @@
 <template>
   <div class="vuetable">
+    <slot name="searchBar">
+      <Search
+          placeholder="Type your search"
+          className="form-control"
+      />
+    </slot>
+
+    <div @input="setShowData"></div>
+
     <table>
       <caption>{{ tableTitle }}</caption>
       <thead>
-        <tr>
-          <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
-        </tr>
+      <tr>
+        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="(entry, index) in showData" :key="index">
-          <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
-        </tr>
+      <tr v-for="(entry, index) in showData" :key="index">
+        <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
+      </tr>
       </tbody>
     </table>
 
-    <Pagination :config = this.Pagination @pagination = "setShowData" />
+    <Pagination :config=this.Pagination @pagination="setShowData"/>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Features/Pagination.vue'
+import Search from '@/components/Features/Search'
 
 export default {
-  name: 'Vue_table_pro',
+  name: 'VueTablePro',
   props: {
     config: {
       type: Object,
@@ -30,6 +40,7 @@ export default {
     }
   },
   components: {
+    Search,
     Pagination
   },
   data () {
@@ -70,6 +81,7 @@ export default {
       this.showData = this.tableData
     },
     setShowData (data) {
+      console.log(11111)
       this.showData = data
     }
   },
@@ -84,30 +96,28 @@ export default {
 </script>
 
 <style scoped>
+table {
+  width: 100%;
+  max-width: 910px;
+  margin: 0 auto;
+}
 
-  table {
-    width: 100%;
-    max-width: 910px;
-    margin: 0 auto;
-  }
+caption {
+  text-align: center;
+  background-color: #f1f1f1;
+  font-weight: 700;
+  padding: 10px;
+}
 
-  caption {
-    text-align: center;
-    background-color: #f1f1f1;
-    font-weight: 700;
-    padding: 10px;
-  }
+th {
+  background-color: #f2f2f2;
+  text-align: left;
+  padding: 10px;
+}
 
-  th {
-    background-color: #f2f2f2;
-    text-align: left;
-    padding: 10px;
-  }
-
-  td {
-    background-color: #f8f8f8;
-    text-align: left;
-    padding: 10px;
-  }
-
+td {
+  background-color: #f8f8f8;
+  text-align: left;
+  padding: 10px;
+}
 </style>
