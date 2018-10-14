@@ -33,8 +33,7 @@ export default {
           'car_model_year': 'Year',
           'car_price': 'Price',
           'edit_row': 'Edit',
-          'delete_row': 'Delete',
-          'qsdas': 'asdas'
+          'delete_row': 'Delete'
         }
       }
     }
