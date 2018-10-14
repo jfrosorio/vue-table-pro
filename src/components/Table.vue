@@ -41,7 +41,8 @@ export default {
       showData: [],
       tableHeaders: this.config.headers || [],
       pagination: this.config.pagination || null,
-      extraColumns: this.config.extraColumns || []
+      extraColumns: this.config.extraColumns || [],
+      customHeaders: this.config.customHeaders || null
     }
   },
   methods: {
@@ -85,6 +86,16 @@ export default {
     },
     _setShowData (data) {
       this.showData = data
+    },
+    _addCustomHeaders () {
+      for (let headerProp in this.customHeaders) {
+        this.tableHeaders.forEach(header => {
+          if (this.customHeaders.hasOwnProperty(header)) {
+            let index = this.tableHeaders.indexOf(headerProp)
+            this.tableHeaders[index] = this.customHeaders[headerProp]
+          }
+        })
+      }
     }
   },
   created () {
@@ -96,6 +107,10 @@ export default {
 
     if (this.extraColumns.length) {
       this._addExtraColumns()
+    }
+
+    if (this.customHeaders) {
+      this._addCustomHeaders()
     }
   }
 }

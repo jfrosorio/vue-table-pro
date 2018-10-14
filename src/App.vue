@@ -26,7 +26,15 @@ export default {
           perPage: 15,
           size: 6
         },
-        extraColumns: ['edit_row', 'delete_row']
+        extraColumns: ['edit_row', 'delete_row'],
+        customHeaders: {
+          'car_brand': 'Brand',
+          'car_model': 'Model',
+          'car_model_year': 'Year',
+          'car_price': 'Price',
+          'edit_row': 'Edit',
+          'delete_row': 'Delete'
+        }
       }
     }
   }
