@@ -1,0 +1,14 @@
+.container{
+    width: 80%;
+    margin: auto;
+}
+
+/*== Search input
+ */
+.vuetable__search-input{
+    width: 100%;
+    height: 3em;
+    margin-bottom: 30px;
+    padding: 4px 15px;
+    box-sizing: border-box;
+}

@@ -1,8 +1,8 @@
 <template>
   <input
       type="text"
-      :class="className"
-      :placeholder="placeholder"
+      :class="config.className"
+      :placeholder="config.placeholder"
       v-model="value"
       @input="_search"
   >
@@ -18,11 +18,32 @@ export default {
   },
   props: {
     className: String,
-    placeholder: String
+    placeholder: String,
+    config: Object
   },
   methods: {
     _search () {
-      this.$emit('input', this.value)
+      const needle = this.value.toLowerCase()
+      const headers = this.$parent.config.headers
+      let rows = this.$parent.globalData
+
+      const data = rows.filter((row) => {
+        let hasMatch = false
+
+        for (let header of headers) {
+          if (row.hasOwnProperty(header)) {
+            const haystack = String(row[header]).toLowerCase()
+
+            hasMatch = haystack.includes(needle)
+
+            if (hasMatch) break
+          }
+        }
+
+        return hasMatch
+      })
+
+      this.$emit('search', data)
     }
   }
 }

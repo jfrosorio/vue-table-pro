@@ -1,13 +1,6 @@
 <template>
   <div id="app">
     <VueTablePro :config=config>
-      <div slot="searchBar" class="form-group">
-        <Search
-            placeholder="Type your search"
-            className="form-control"
-        >
-        </Search>
-      </div>
     </VueTablePro>
   </div>
 </template>
@@ -32,6 +25,10 @@ export default {
         pagination: {
           perPage: 15,
           size: 6
+        },
+        search: {
+          placeholder: 'Type your search',
+          className: 'vuetable__search-input'
         }
       }
     }

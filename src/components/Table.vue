@@ -1,13 +1,9 @@
 <template>
   <div class="vuetable">
-    <slot name="searchBar">
-      <Search
-          placeholder="Type your search"
-          className="form-control"
-      />
-    </slot>
-
-    <div @input="setShowData"></div>
+    <Search
+        :config=this.search
+        @search="setShowData"
+    />
 
     <table>
       <caption>{{ tableTitle }}</caption>
@@ -47,9 +43,11 @@ export default {
     return {
       tableTitle: this.config.title || 'Features Title',
       tableData: this.config.data || [],
+      globalData: [],
       showData: [],
       tableHeaders: this.config.headers || [],
-      Pagination: this.config.pagination || null
+      Pagination: this.config.pagination || null,
+      search: this.config.search
     }
   },
   methods: {
@@ -69,6 +67,8 @@ export default {
           this.showData.push(rowEntry)
         }
       })
+
+      this.globalData = this.showData
     },
     _addAllCollumns () {
       this.tableData.forEach((entry) => {
@@ -78,10 +78,11 @@ export default {
           }
         })
       })
+
       this.showData = this.tableData
+      this.globalData = this.showData
     },
     setShowData (data) {
-      console.log(11111)
       this.showData = data
     }
   },
@@ -98,7 +99,6 @@ export default {
 <style scoped>
 table {
   width: 100%;
-  max-width: 910px;
   margin: 0 auto;
 }
 
