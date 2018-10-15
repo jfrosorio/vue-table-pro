@@ -26,6 +26,10 @@ export default {
           perPage: 15,
           size: 6
         },
+        search: {
+          placeholder: 'Type your search',
+          className: 'vuetable__search-input'
+        },
         extraColumns: ['edit_row', 'delete_row'],
         customHeaders: {
           'car_brand': 'Brand',
