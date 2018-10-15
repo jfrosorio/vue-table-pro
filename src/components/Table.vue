@@ -10,13 +10,15 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(entry, index) in showData" :key="index">
-        <td v-for="(property, index) in entry" :key="index">{{ property }}</td>
-      </tr>
+        <tr v-for="(entry, index) in showData" :key="index">
+          <td v-for="(property, index) in entry" :key="index">
+            <slot :name="property">{{ property }}</slot>
+          </td>
+        </tr>
       </tbody>
     </table>
 
-    <Pagination :config=this.Pagination @pagination="setShowData"/>
+    <Pagination :config = this.pagination @pagination = "_setShowData" />
   </div>
 </template>
 
@@ -43,8 +45,10 @@ export default {
       globalData: [],
       showData: [],
       tableHeaders: this.config.headers || [],
-      Pagination: this.config.pagination || null,
-      search: this.config.search || null
+      search: this.config.search || null,
+      pagination: this.config.pagination || null,
+      extraColumns: this.config.extraColumns || [],
+      customHeaders: this.config.customHeaders || null
     }
   },
   methods: {
@@ -79,8 +83,29 @@ export default {
       this.showData = this.tableData
       this.globalData = this.showData
     },
-    setShowData (data) {
+    _addExtraColumns () {
+      this.extraColumns.forEach((extraCol, key) => {
+        if (extraCol) {
+          this.tableHeaders.push(extraCol)
+          this.showData.forEach(entry => {
+            const colKey = `extraCol${key}`
+            entry[colKey] = extraCol
+          })
+        }
+      })
+    },
+    _setShowData (data) {
       this.showData = data
+    },
+    _addCustomHeaders () {
+      for (let headerProp in this.customHeaders) {
+        this.tableHeaders.forEach(header => {
+          if (this.customHeaders.hasOwnProperty(header)) {
+            let index = this.tableHeaders.indexOf(headerProp)
+            this.tableHeaders[index] = this.customHeaders[headerProp]
+          }
+        })
+      }
     }
   },
   created () {
@@ -88,6 +113,14 @@ export default {
       this._addColumnsByHeader()
     } else {
       this._addAllCollumns()
+    }
+
+    if (this.extraColumns.length) {
+      this._addExtraColumns()
+    }
+
+    if (this.customHeaders) {
+      this._addCustomHeaders()
     }
   }
 }

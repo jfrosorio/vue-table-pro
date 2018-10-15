@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <VueTablePro :config=config>
+    <VueTablePro :config = config>
+      <a slot-scope="extraCol" slot="edit_row">Edit</a>
+      <a slot-scope="extraCol" slot="delete_row">Delete</a>
     </VueTablePro>
   </div>
 </template>
@@ -27,6 +29,15 @@ export default {
         search: {
           placeholder: 'Type your search',
           className: 'vuetable__search-input'
+        },
+        extraColumns: ['edit_row', 'delete_row'],
+        customHeaders: {
+          'car_brand': 'Brand',
+          'car_model': 'Model',
+          'car_model_year': 'Year',
+          'car_price': 'Price',
+          'edit_row': 'Edit',
+          'delete_row': 'Delete'
         }
       }
     }
