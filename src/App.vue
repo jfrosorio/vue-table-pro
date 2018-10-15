@@ -8,12 +8,10 @@
 <script>
 import VueTablePro from './components/Table.vue'
 import data from './data/cars'
-import Search from './components/Features/Search'
 
 export default {
   name: 'app',
   components: {
-    Search,
     VueTablePro
   },
   data () {

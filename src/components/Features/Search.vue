@@ -1,8 +1,8 @@
 <template>
   <input
       type="text"
-      :class="config.className"
-      :placeholder="config.placeholder"
+      :class="className"
+      :placeholder="placeholder"
       v-model="value"
       @input="_search"
   >
@@ -13,12 +13,12 @@ export default {
   name: 'Search',
   data () {
     return {
+      className: this.config.className || '',
+      placeholder: this.config.placeholder || '',
       value: ''
     }
   },
   props: {
-    className: String,
-    placeholder: String,
     config: Object
   },
   methods: {
