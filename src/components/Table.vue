@@ -1,6 +1,6 @@
 <template>
   <div class="vuetable">
-    <Search v-if="this.search" :config=this.search @search="setShowData"/>
+    <Search v-if="this.search" :config=this.search @search="_setShowData"/>
 
     <table>
       <caption>{{ tableTitle }}</caption>
@@ -44,7 +44,7 @@ export default {
       tableData: this.config.data || [],
       globalData: [],
       showData: [],
-      tableHeaders: this.config.headers || [],
+      tableHeaders: this.config.headers.slice(0) || [],
       search: this.config.search || null,
       pagination: this.config.pagination || null,
       extraColumns: this.config.extraColumns || [],

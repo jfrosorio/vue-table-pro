@@ -1,5 +1,6 @@
 <template>
   <div class="vuetable__pagination" v-show="enabled && isNecessary">
+    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows" @click="_updatePagination(currentPage - 1)"></a>
     <a class="vuetable__pagination-page" @click="_updatePagination(first)" :class="_isCurrentPage(first)">
       {{ first }}
     </a>
@@ -11,6 +12,7 @@
     <a class="vuetable__pagination-page" @click="_updatePagination(last)" :class="_isCurrentPage(last)">
       {{ last }}
     </a>
+    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--next" v-if="arrows" @click="_updatePagination(currentPage + 1)"></a>
   </div>
 </template>
 
@@ -28,6 +30,7 @@ export default {
       first: 1,
       size: 5,
       paged: 1,
+      arrows: false,
       currentPage: 1,
       perPage: 10,
       enabled: true,
@@ -58,6 +61,7 @@ export default {
       // Set pagination configuration defaults
       this.enabled = this.settings !== null ? this.enabled : !this.enabled
       this.size = this.settings.size ? this.settings.size - this.first : this.size
+      this.arrows = this.settings.arrows || this.arrows
       this.perPage = this.settings.perPage || this.perPage
       this.isNecessary = this.total > this.perPage
 
@@ -153,6 +157,7 @@ export default {
       }
     },
     _updatePagination (page) {
+      if (page < this.first || page > this.last) return
       this.currentPage = page
       this.isFirstItemOfNav = this.currentPage === this.navigationPages[0]
       this.isLastItemOfNav = this.currentPage === this.navigationPages[this.navigationPages.length - 1]
@@ -191,7 +196,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .vuetable__pagination {
   margin: 20px auto;
   user-select: none;
@@ -228,5 +233,51 @@ export default {
   letter-spacing: 1px;
   vertical-align: top;
   color: #66757F;
+}
+
+.vuetable__pagination-arrow {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  background-color: #e1e8ed;
+  font-size: 17px;
+  line-height: 40px;
+  color: #66757F;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
+
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    margin: auto;
+    border: solid #607d8b;
+    border-width: 0 2px 2px 0;
+    content: '';
+  }
+
+  &:hover {
+    background-color: #607D8B;
+
+    &::before {
+      border-color: #F5F8FA;
+    }
+  }
+}
+
+.vuetable__pagination-arrow--previous::before {
+  left: 17px;
+  transform: rotate(135deg);
+}
+
+.vuetable__pagination-arrow--next::before {
+  left: 11px;
+  transform: rotate(-45deg);
 }
 </style>
