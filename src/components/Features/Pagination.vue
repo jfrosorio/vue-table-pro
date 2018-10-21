@@ -1,6 +1,6 @@
 <template>
   <div class="vuetable__pagination" v-show="enabled && isNecessary">
-    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows && this.hasMoreUntilFirst" @click="_updatePagination(currentPage - 1)"></a>
+    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows && hasMoreUntilFirst" @click="_updatePagination(currentPage - 1)"></a>
     <a class="vuetable__pagination-page" @click="_updatePagination(first)" :class="_isCurrentPage(first)">
       {{ first }}
     </a>
@@ -12,7 +12,7 @@
     <a class="vuetable__pagination-page" @click="_updatePagination(last)" :class="_isCurrentPage(last)">
       {{ last }}
     </a>
-    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--next" v-if="arrows && this.hasMoreUntilLast" @click="_updatePagination(currentPage + 1)"></a>
+    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--next" v-if="arrows && hasMoreUntilLast" @click="_updatePagination(currentPage + 1)"></a>
   </div>
 </template>
 
