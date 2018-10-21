@@ -24,7 +24,8 @@ export default {
         headers: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
         pagination: {
           perPage: 15,
-          size: 6
+          size: 6,
+          arrows: true
         },
         search: {
           placeholder: 'Type your search',
