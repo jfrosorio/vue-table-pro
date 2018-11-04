@@ -1,37 +1,68 @@
 <template>
   <div class="vuetable">
-    <Search v-if="this.search" :config=this.search @search="_setShowData"/>
+    <Search
+        v-if="search"
+        :className="search.className"
+        :placeholder="search.placeholder"
+        @search="_setShowData"
+    />
 
     <table>
       <caption>{{ tableTitle }}</caption>
-      <thead>
+      <thead v-if="tableHeader">
       <tr>
         <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
       </tr>
       </thead>
       <tbody>
-        <tr v-for="(entry, index) in showData" :key="index">
-          <td v-for="(property, index) in entry" :key="index">
-            <slot :name="property">{{ property }}</slot>
-          </td>
-        </tr>
+      <tr v-for="(row, rowIndex) in showData" :key="rowIndex">
+        <td v-for="colKey in _getDisplayableKeys()" :key="colKey">
+          <slot :name="colKey">{{ row[colKey] }}</slot>
+        </td>
+      </tr>
       </tbody>
     </table>
 
-    <Pagination :config = this.pagination @pagination = "_setShowData" />
+    <Pagination
+        v-if="pagination"
+        :perPage="pagination.perPage"
+        :size="pagination.size"
+        :arrows="pagination.arrows"
+        @pagination="_setShowData"
+    />
   </div>
 </template>
 
 <script>
-import Pagination from '@/components/Features/Pagination.vue'
+import Pagination from '@/components/Features/Pagination'
 import Search from '@/components/Features/Search'
 
 export default {
   name: 'VueTablePro',
   props: {
-    config: {
+    columns: {
       type: Object,
-      required: true
+      default: null
+    },
+    rows: {
+      type: Array,
+      default: null
+    },
+    tableHeader: {
+      type: Boolean,
+      default: true
+    },
+    tableTitle: {
+      type: String,
+      default: 'Features Title'
+    },
+    search: {
+      type: Object,
+      default: null
+    },
+    pagination: {
+      type: Object,
+      default: null
     }
   },
   components: {
@@ -40,87 +71,67 @@ export default {
   },
   data () {
     return {
-      tableTitle: this.config.title || 'Features Title',
-      tableData: this.config.data || [],
-      globalData: [],
-      showData: [],
-      tableHeaders: this.config.headers.slice(0) || [],
-      search: this.config.search || null,
-      pagination: this.config.pagination || null,
-      extraColumns: this.config.extraColumns || [],
-      customHeaders: this.config.customHeaders || null
+      showData: []
     }
   },
   methods: {
-    _addColumnsByHeader () {
-      this.tableData.forEach(entry => {
-        const rowEntry = {}
-
-        // Loop through each entry keys and check if
-        // they match any of the table headers
-        Object.keys(entry).forEach(key => {
-          if (this.tableHeaders.includes(key)) {
-            rowEntry[key] = entry[key]
-          }
-        })
-
-        if (Object.keys(rowEntry).length) {
-          this.showData.push(rowEntry)
-        }
-      })
-
-      this.globalData = this.showData
+    /**
+     * Evaluates if valid data was provided.
+     *
+     * @TODO Perhaps we should evaluate the format too.
+     * @returns {boolean}
+     * @private
+     */
+    _hasDataAvailable () {
+      return this.rows !== null && typeof this.rows !== 'undefined'
     },
-    _addAllCollumns () {
-      this.tableData.forEach((entry) => {
-        Object.keys(entry).forEach((key) => {
-          if (this.tableHeaders.indexOf(key) === -1) {
-            this.tableHeaders.push(key)
-          }
-        })
-      })
+    /**
+     * If a columns mapping is provided, its keys will be used for building the table
+     * headers. If not, the app will default to the data (if any) keys provided.
+     *
+     * @returns {Array}
+     * @private
+     */
+    _getDisplayableKeys () {
+      let attrs = []
+      let dataSet = {}
 
-      this.showData = this.tableData
-      this.globalData = this.showData
+      if (this.columns) {
+        dataSet = this.columns
+      } else if (this._hasDataAvailable()) {
+        dataSet = this.rows[0]
+      }
+
+      for (let key in dataSet) {
+        attrs.push(key)
+      }
+
+      return attrs
     },
-    _addExtraColumns () {
-      this.extraColumns.forEach((extraCol, key) => {
-        if (extraCol) {
-          this.tableHeaders.push(extraCol)
-          this.showData.forEach(entry => {
-            const colKey = `extraCol${key}`
-            entry[colKey] = extraCol
-          })
-        }
-      })
-    },
+    /**
+     * Sets the data to be rendered.
+     *
+     * @param data
+     * @private
+     */
     _setShowData (data) {
       this.showData = data
-    },
-    _addCustomHeaders () {
-      for (let headerProp in this.customHeaders) {
-        this.tableHeaders.forEach(header => {
-          if (this.customHeaders.hasOwnProperty(header)) {
-            let index = this.tableHeaders.indexOf(headerProp)
-            this.tableHeaders[index] = this.customHeaders[headerProp]
-          }
-        })
-      }
     }
   },
   created () {
-    if (this.tableHeaders.length) {
-      this._addColumnsByHeader()
-    } else {
-      this._addAllCollumns()
-    }
+    this._setShowData(this.rows)
+  },
+  computed: {
+    tableHeaders () {
+      let headers = []
 
-    if (this.extraColumns.length) {
-      this._addExtraColumns()
-    }
+      if (this.columns) {
+        for (let key in this.columns) {
+          headers.push(this.columns[key])
+        }
+      }
 
-    if (this.customHeaders) {
-      this._addCustomHeaders()
+      return headers
     }
   }
 }

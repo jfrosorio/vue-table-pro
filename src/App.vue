@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <VueTablePro :config = config>
-      <a slot-scope="extraCol" slot="edit_row">Edit</a>
+    <VueTablePro
+        :columns="columns"
+        :rows="rows"
+        :title="title"
+        :pagination="pagination"
+        :search="search"
+    >
+      <a slot-scope="extraCol" slot="edit_row">Edit 1</a>
       <a slot-scope="extraCol" slot="delete_row">Delete</a>
     </VueTablePro>
   </div>
@@ -18,28 +24,24 @@ export default {
   },
   data () {
     return {
-      config: {
-        title: 'Cars List',
-        data,
-        headers: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
-        pagination: {
-          perPage: 15,
-          size: 6,
-          arrows: true
-        },
-        search: {
-          placeholder: 'Type your search',
-          className: 'vuetable__search-input'
-        },
-        extraColumns: ['edit_row', 'delete_row'],
-        customHeaders: {
-          'car_brand': 'Brand',
-          'car_model': 'Model',
-          'car_model_year': 'Year',
-          'car_price': 'Price',
-          'edit_row': 'Edit',
-          'delete_row': 'Delete'
-        }
+      columns: {
+        'car_brand': 'Brand',
+        'car_model': 'Model',
+        'car_model_year': 'Year',
+        'car_price': 'Price',
+        'edit_row': '',
+        'delete_row': ''
+      },
+      rows: data,
+      title: 'Cars List',
+      pagination: {
+        perPage: 15,
+        size: 6,
+        arrows: true
+      },
+      search: {
+        placeholder: 'Type your search idiot',
+        className: 'vuetable__search-input'
       }
     }
   }

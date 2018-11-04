@@ -11,28 +11,32 @@
 <script>
 export default {
   name: 'Search',
-  data () {
-    return {
-      className: this.config.className || '',
-      placeholder: this.config.placeholder || '',
-      value: ''
+  props: {
+    className: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
+      type: String,
+      default: 'Type your search'
     }
   },
-  props: {
-    config: Object
+  data () {
+    return {
+      value: ''
+    }
   },
   methods: {
     _search () {
       const needle = this.value.toLowerCase()
-      const headers = this.$parent.config.headers
-      let rows = this.$parent.globalData
+      let rows = this.$parent.rows
 
       const data = rows.filter((row) => {
         let hasMatch = false
 
-        for (let header of headers) {
-          if (row.hasOwnProperty(header)) {
-            const haystack = String(row[header]).toLowerCase()
+        for (let key of this.$parent._getDisplayableKeys()) {
+          if (row.hasOwnProperty(key)) {
+            const haystack = String(row[key]).toLowerCase()
 
             hasMatch = haystack.includes(needle)
 

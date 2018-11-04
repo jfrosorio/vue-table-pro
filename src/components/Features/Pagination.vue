@@ -1,5 +1,5 @@
 <template>
-  <div class="vuetable__pagination" v-show="enabled && isNecessary">
+  <div class="vuetable__pagination" v-show="isNecessary">
     <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows && hasMoreUntilFirst" @click="_updatePagination(currentPage - 1)"></a>
     <a class="vuetable__pagination-page" @click="_updatePagination(first)" :class="_isCurrentPage(first)">
       {{ first }}
@@ -20,23 +20,26 @@
 export default {
   name: 'Pagination',
   props: {
-    config: {
-      type: Object,
-      required: false
+    perPage: {
+      type: Number,
+      default: 10
+    },
+    size: {
+      type: Number,
+      default: 5
+    },
+    arrows: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       first: 1,
-      size: 5,
       paged: 1,
-      arrows: false,
       currentPage: 1,
-      perPage: 10,
-      enabled: true,
       isNecessary: false,
-      navigationPages: [],
-      settings: this.config || null
+      navigationPages: []
     }
   },
   methods: {
@@ -59,21 +62,18 @@ export default {
       this.total = this.$parent.showData.length
 
       // Set pagination configuration defaults
-      this.enabled = this.settings !== null ? this.enabled : !this.enabled
-      this.size = this.settings.size ? this.settings.size - this.first : this.size
-      this.arrows = this.settings.arrows || this.arrows
-      this.perPage = this.settings.perPage || this.perPage
+      this.pageSize = this.size - this.first
       this.isNecessary = this.total > this.perPage
 
       // Set conditional pagination
-      this.needsMoreNavigation = this.total > this.perPage * this.size
+      this.needsMoreNavigation = this.total > this.perPage * this.pageSize
       this.hasMoreUntilLast = this.needsMoreNavigation
       this.hasMoreUntilFirst = this.needsMoreNavigation && this.paged > 1
       this.last = Math.ceil(this.total / this.perPage)
-      this.pagesLength = this.hasMoreUntilLast ? this.size - 1 : this.last - 2
+      this.pagesLength = this.hasMoreUntilLast ? this.pageSize - 1 : this.last - 2
       this.navigationPages = Array.from({length: this.pagesLength}, (v, k) => k + 2)
 
-      if (this.isNecessary && this.enabled) {
+      if (this.isNecessary) {
         this._paginateTableData()
       }
     },
@@ -81,24 +81,24 @@ export default {
       return page === this.currentPage ? 'vuetable__pagination-page--current' : ''
     },
     _checkIfHasMoreUntilFirst () {
-      if (this.isFirstItemOfNav && this.currentPage <= this.size) {
+      if (this.isFirstItemOfNav && this.currentPage <= this.pageSize) {
         this.hasMoreUntilFirst = false
-      } else if (this.isLastItemOfNav || this.currentPage > this.size) {
+      } else if (this.isLastItemOfNav || this.currentPage > this.pageSize) {
         this.hasMoreUntilFirst = true
       }
     },
     _checkIfHasMoreUntilLast () {
       const remainingPages = this.last - this.currentPage
 
-      if (this.isFirstItemOfNav || this.currentPage + this.size < this.last) {
+      if (this.isFirstItemOfNav || this.currentPage + this.pageSize < this.last) {
         this.hasMoreUntilLast = true
-      } else if (this.isLastItemOfNav && remainingPages < this.size) {
+      } else if (this.isLastItemOfNav && remainingPages < this.pageSize) {
         this.hasMoreUntilLast = false
       }
     },
     _navigateBack () {
-      this.navigationPages = this.navigationPages.map(page => page - (this.size - 2)).filter(page => page > this.first)
-      const stepPagesLength = (this.size - 1)
+      this.navigationPages = this.navigationPages.map(page => page - (this.pageSize - 2)).filter(page => page > this.first)
+      const stepPagesLength = (this.pageSize - 1)
 
       if (stepPagesLength !== this.navigationPages.length) {
         let difference = stepPagesLength - this.navigationPages.length
@@ -120,13 +120,13 @@ export default {
       this.navigationPages = []
       this.paged = 1
 
-      for (let index = this.first + 1; this.navigationPages.length < this.size - 1; index++) {
+      for (let index = this.first + 1; this.navigationPages.length < this.pageSize - 1; index++) {
         this.navigationPages.push(index)
       }
     },
     _navigateForwards () {
       const startingPoint = this.currentPage
-      const endingPoint = startingPoint + (this.size - 1)
+      const endingPoint = startingPoint + (this.pageSize - 1)
       const pointsInterval = endingPoint - startingPoint
 
       this.navigationPages = new Array(pointsInterval).fill().map((_, page) => page + startingPoint).filter(page => page < this.last)
@@ -148,9 +148,9 @@ export default {
     _goToLastPage () {
       this.hasMoreUntilLast = false
       this.navigationPages = []
-      this.paged = Math.round(this.last / (this.size - 2))
+      this.paged = Math.round(this.last / (this.pageSize - 2))
 
-      const lastPagesLength = this.size - 1
+      const lastPagesLength = this.pageSize - 1
 
       for (let index = this.last - 1; this.navigationPages.length < lastPagesLength; index--) {
         this.navigationPages.unshift(index)
