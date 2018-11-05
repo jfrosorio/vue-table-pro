@@ -7,7 +7,7 @@
         :pagination="pagination"
         :search="search"
     >
-      <a slot-scope="extraCol" slot="edit_row">Edit 1</a>
+      <a slot-scope="extraCol" slot="edit_row">Edit</a>
       <a slot-scope="extraCol" slot="delete_row">Delete</a>
     </VueTablePro>
   </div>
@@ -29,8 +29,8 @@ export default {
         'car_model': 'Model',
         'car_model_year': 'Year',
         'car_price': 'Price',
-        'edit_row': '',
-        'delete_row': ''
+        'edit_row': 'Edit',
+        'delete_row': 'Delete'
       },
       rows: data,
       title: 'Cars List',
@@ -40,7 +40,7 @@ export default {
         arrows: true
       },
       search: {
-        placeholder: 'Type your search idiot',
+        placeholder: 'Type your search',
         className: 'vuetable__search-input'
       }
     }
