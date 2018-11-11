@@ -20,6 +20,10 @@
 export default {
   name: 'Pagination',
   props: {
+    tableData: {
+      type: Array,
+      default: () => []
+    },
     perPage: {
       type: Number,
       default: 10
@@ -49,7 +53,7 @@ export default {
       const start = end - this.perPage
 
       // Build paginated data
-      const paginatedData = this.allShowData.filter((entry, index) => {
+      const paginatedData = this.tableData.filter((entry, index) => {
         return index >= start && index < end
       })
 
@@ -58,8 +62,7 @@ export default {
     },
     _loadPagination () {
       // Get table data
-      this.allShowData = this.$parent.showData
-      this.total = this.$parent.showData.length
+      this.total = this.tableData.length
 
       // Set pagination configuration defaults
       this.pageSize = this.size - this.first
@@ -192,6 +195,15 @@ export default {
   },
   created () {
     this._loadPagination()
+  },
+  watch: {
+    tableData () {
+      // Reset pagination
+      this._updatePagination(this.first)
+
+      // Paginate new data
+      this._loadPagination()
+    }
   }
 }
 </script>
