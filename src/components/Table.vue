@@ -4,7 +4,7 @@
         v-if="search"
         :className="search.className"
         :placeholder="search.placeholder"
-        @search="_setShowData"
+        @search="_setTableData"
     />
 
     <table>
@@ -25,6 +25,7 @@
 
     <Pagination
         v-if="pagination"
+        :tableData.sync="tableData"
         :perPage="pagination.perPage"
         :size="pagination.size"
         :arrows="pagination.arrows"
@@ -71,7 +72,8 @@ export default {
   },
   data () {
     return {
-      showData: []
+      showData: [],
+      tableData: []
     }
   },
   methods: {
@@ -116,10 +118,19 @@ export default {
      */
     _setShowData (data) {
       this.showData = data
+    },
+    _setTableData (data) {
+      this.tableData = data
+
+      // If there's no pagination set the show data to all table data
+      if (!this.pagination) {
+        this._setShowData(data)
+      }
     }
   },
   created () {
     this._setShowData(this.rows)
+    this._setTableData(this.rows)
   },
   computed: {
     tableHeaders () {
