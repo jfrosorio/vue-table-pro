@@ -69,7 +69,7 @@ export default {
       this.isNecessary = this.total > this.perPage
 
       // Set conditional pagination
-      this.needsMoreNavigation = this.total > this.perPage * this.pageSize
+      this.needsMoreNavigation = this.total > this.perPage * this.size
       this.hasMoreUntilLast = this.needsMoreNavigation
       this.hasMoreUntilFirst = this.needsMoreNavigation && this.paged > 1
       this.last = Math.ceil(this.total / this.perPage)
