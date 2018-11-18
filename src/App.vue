@@ -6,6 +6,7 @@
         :title="title"
         :pagination="pagination"
         :search="search"
+        :expandable="expandable"
     >
       <a slot-scope="extraCol" slot="edit_row">Edit</a>
       <a slot-scope="extraCol" slot="delete_row">Delete</a>
@@ -42,6 +43,11 @@ export default {
       search: {
         placeholder: 'Type your search',
         className: 'vuetable__search-input'
+      },
+      expandable: {
+        'car_fuel': 'Fuel',
+        'car_doors': 'Doors',
+        'car_seats': 'Seats'
       }
     }
   }

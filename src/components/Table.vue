@@ -11,15 +11,24 @@
       <caption>{{ tableTitle }}</caption>
       <thead v-if="tableHeader">
       <tr>
+        <th v-if="expandable">More</th>
         <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(row, rowIndex) in showData" :key="rowIndex">
-        <td v-for="colKey in _getDisplayableKeys()" :key="colKey">
-          <slot :name="colKey">{{ row[colKey] }}</slot>
-        </td>
-      </tr>
+      <template v-for="(row, rowIndex) in showData">
+        <tr :key="rowIndex">
+          <td v-if="expandable" @click="toggleExpandable(rowIndex)">More</td>
+          <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
+            <slot :name="colKey">{{ row[colKey] }}</slot>
+          </td>
+        </tr>
+        <tr :key="rowIndex" v-if="expandableIsActive">
+          <div v-for="colKey in _getDisplayableKeys(expandable)" :key="colKey">
+            <slot :name="colKey">{{ row[colKey] }}</slot>
+          </div>
+        </tr>
+      </template>
       </tbody>
     </table>
 
@@ -63,6 +72,10 @@ export default {
     pagination: {
       type: Object,
       default: null
+    },
+    expandable: {
+      type: Object,
+      default: null
     }
   },
   components: {
@@ -71,7 +84,9 @@ export default {
   },
   data () {
     return {
-      showData: []
+      showData: [],
+      expandableData: [],
+      expandableIsActive: false
     }
   },
   methods: {
@@ -92,12 +107,12 @@ export default {
      * @returns {Array}
      * @private
      */
-    _getDisplayableKeys () {
+    _getDisplayableKeys (displayableKeys) {
       let attrs = []
       let dataSet = {}
 
-      if (this.columns) {
-        dataSet = this.columns
+      if (displayableKeys) {
+        dataSet = displayableKeys
       } else if (this._hasDataAvailable()) {
         dataSet = this.rows[0]
       }
@@ -116,10 +131,18 @@ export default {
      */
     _setShowData (data) {
       this.showData = data
+    },
+    _setExpandableData (data) {
+      this.expandableData = data
+    },
+    toggleExpandable () {
+      this.expandableIsActive = !this.expandableIsActive
     }
   },
   created () {
     this._setShowData(this.rows)
+    this._setExpandableData(this.expandable)
+    console.log(this.columns)
   },
   computed: {
     tableHeaders () {
@@ -130,7 +153,6 @@ export default {
           headers.push(this.columns[key])
         }
       }
-
       return headers
     }
   }
