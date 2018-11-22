@@ -10,18 +10,20 @@
     <table>
       <caption>{{ tableTitle }}</caption>
       <thead v-if="tableHeader">
-      <tr>
-        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
-      </tr>
+        <tr>
+          <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(row, rowIndex) in showData" :key="rowIndex">
-        <td v-for="colKey in _getDisplayableKeys()" :key="colKey">
-          <slot :name="colKey">{{ row[colKey] }}</slot>
-        </td>
-      </tr>
+        <tr v-for="(row, rowIndex) in showData" :key="rowIndex">
+          <td v-for="colKey in _getDisplayableKeys()" :key="colKey">
+            <slot :name="colKey">{{ row[colKey] }}</slot>
+          </td>
+        </tr>
       </tbody>
     </table>
+
+    <slot name="search_empty_results" v-if="!tableData.length"></slot>
 
     <Pagination
         v-if="pagination"
