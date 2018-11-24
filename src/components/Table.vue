@@ -11,22 +11,24 @@
       <caption>{{ tableTitle }}</caption>
       <thead v-if="tableHeader">
       <tr>
-        <th v-if="expandable">More</th>
-        <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
+        <th v-if="expandable"></th>
+        <th v-for="(header, index) in columns" :key="index">{{ header }}</th>
       </tr>
       </thead>
       <tbody>
       <template v-for="(row, rowIndex) in showData">
         <tr :key="rowIndex">
-          <td v-if="expandable" @click="toggleExpandable(rowIndex)">More</td>
+          <td v-if="expandable" @click="_toggleExpandable(rowIndex)" class="vuetable__expandable-toggler"></td>
           <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
           </td>
         </tr>
-        <tr :key="rowIndex" v-if="expandableIsActive">
-          <div v-for="colKey in _getDisplayableKeys(expandable)" :key="colKey">
-            <slot :name="colKey">{{ row[colKey] }}</slot>
-          </div>
+        <tr :key="`expandable-${rowIndex}`" v-if="_isExpanded(rowIndex)" class="vuetable__expandable-row">
+          <td :colspan="tableHeadersLength">
+            <div v-for="(colKey, colField) in expandableFields" :key="colKey">
+              <slot :name="colKey">{{ expandableFields[colField] + ": " + row[colField] }}</slot>
+            </div>
+          </td>
         </tr>
       </template>
       </tbody>
@@ -76,7 +78,10 @@ export default {
     },
     expandable: {
       type: Object,
-      default: null
+      default: null,
+      validator: obj => {
+        return obj.hasOwnProperty('attachFields') || obj.hasOwnProperty('withColumns')
+      }
     }
   },
   components: {
@@ -87,8 +92,8 @@ export default {
     return {
       showData: [],
       tableData: [],
-      expandableData: [],
-      expandableIsActive: false
+      expandableFields: {},
+      expandedRows: []
     }
   },
   methods: {
@@ -134,12 +139,6 @@ export default {
     _setShowData (data) {
       this.showData = data
     },
-    _setExpandableData (data) {
-      this.expandableData = data
-    },
-    toggleExpandable () {
-      this.expandableIsActive = !this.expandableIsActive
-    },
     _setTableData (data) {
       this.tableData = data
 
@@ -147,23 +146,52 @@ export default {
       if (!this.pagination) {
         this._setShowData(data)
       }
+    },
+    _setExpandableFields () {
+      if (!this.expandable) {
+        return
+      }
+
+      const expandWithColumns = Array.isArray(this.expandable.withColumns)
+      const expandAttachedFields = typeof this.expandable.attachFields === 'object'
+
+      if (expandWithColumns) {
+        let customColumns = {}
+        for (const column in this.columns) {
+          if (this.columns.hasOwnProperty(column) && this.expandable.withColumns.includes(column)) {
+            const element = { [column]: this.columns[column] }
+            customColumns = { ...customColumns, ...element }
+          }
+        }
+        this.expandableFields = customColumns
+      }
+
+      if (expandAttachedFields) {
+        this.expandableFields = { ...this.expandableFields, ...this.expandable.attachFields }
+      }
+    },
+    _toggleExpandable (index) {
+      const expandedRowIndex = this.expandedRows.indexOf(index)
+
+      if (expandedRowIndex >= 0) {
+        this.expandedRows.splice(expandedRowIndex, 1)
+      } else {
+        this.expandedRows.push(index)
+      }
+    },
+    _isExpanded (index) {
+      return this.expandedRows.includes(index)
     }
   },
   created () {
     this._setShowData(this.rows)
     this._setTableData(this.rows)
-    this._setExpandableData(this.expandable)
+    this._setExpandableFields()
   },
   computed: {
-    tableHeaders () {
-      let headers = []
-
-      if (this.columns) {
-        for (let key in this.columns) {
-          headers.push(this.columns[key])
-        }
-      }
-      return headers
+    tableHeadersLength () {
+      const expandableHeader = this.expandable ? 1 : 0
+      return Object.keys(this.columns).length + expandableHeader
     }
   }
 }
