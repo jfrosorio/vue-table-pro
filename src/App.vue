@@ -34,9 +34,10 @@ export default {
         'delete_row': 'Delete'
       },
       expandable: {
-        withColumns: ['car_brand', 'car_model', 'car_model_year'],
+        withColumns: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
         attachFields: {
           'car_fuel': 'Fuel',
+          'car_color': 'Color',
           'car_doors': 'Doors',
           'car_seats': 'Seats'
         }

@@ -3,6 +3,32 @@
     margin: auto;
 }
 
+table {
+    width: 100%;
+    margin: 0 auto;
+    /* The main benefit of table-layout: fixed; is that the table renders much faster. */
+    table-layout: fixed;
+}
+
+caption {
+    text-align: center;
+    background-color: #f1f1f1;
+    font-weight: 700;
+    padding: 10px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 10px;
+}
+
+td {
+    background-color: #f8f8f8;
+    text-align: left;
+    padding: 10px;
+}
+
 /*== Search input
  */
 .vuetable__search-input{
@@ -11,4 +37,82 @@
     margin-bottom: 30px;
     padding: 4px 15px;
     box-sizing: border-box;
+}
+
+/*== Expandable Rows
+ */
+.vuetable__expandable-header {
+    width: 30px;
+}
+
+.vuetable__expandable-toggler {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.vuetable__expandable-toggler::before {
+    content: '+';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 20px;
+    height: 20px;
+    margin: auto;
+
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    color: #66757F;
+    background-color: #E1E8ED;
+    border-radius: 100%;
+}
+
+.vuetable__expandable-toggler:hover::before {
+    background-color: #CCD6DD;
+}
+
+.vuetable__expandable-toggler.is-active::before {
+    content: '-';
+    background-color: #607D8B;
+    color: #F5F8FA;
+}
+
+.vuetable__expandable-panel {
+    background-color: #F5F8FA;
+}
+
+.vuetable__expandable-list {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 20px 40px;
+}
+
+.vuetable__expandable-item {
+    flex: 1 0 25%;
+}
+
+.vuetable__expandable-item:nth-child(n+5) {
+    margin-top: 30px;
+}
+
+.vuetable__expandable-label {
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #66757F;
+}
+
+.vuetable__expandable-value {
+    display: block;
+    margin-top: 3px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.2px;
+    text-transform: capitalize;
 }

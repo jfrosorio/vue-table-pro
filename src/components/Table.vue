@@ -11,22 +11,40 @@
       <caption>{{ tableTitle }}</caption>
       <thead v-if="tableHeader">
       <tr>
-        <th v-if="expandable"></th>
+        <th
+          v-if="expandable"
+          class="vuetable__expandable-header">
+        </th>
         <th v-for="(header, index) in columns" :key="index">{{ header }}</th>
       </tr>
       </thead>
       <tbody>
       <template v-for="(row, rowIndex) in showData">
         <tr :key="rowIndex">
-          <td v-if="expandable" @click="_toggleExpandable(rowIndex)" class="vuetable__expandable-toggler"></td>
+          <td
+            v-if="expandable"
+            @click="_toggleExpandable(rowIndex)"
+            :class="{ 'is-active': _isExpanded(rowIndex) }"
+            class="vuetable__expandable-toggler">
+          </td>
           <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
           </td>
         </tr>
-        <tr :key="`expandable-${rowIndex}`" v-if="_isExpanded(rowIndex)" class="vuetable__expandable-row">
-          <td :colspan="tableHeadersLength">
-            <div v-for="(colKey, colField) in expandableFields" :key="colKey">
-              <slot :name="colKey">{{ expandableFields[colField] + ": " + row[colField] }}</slot>
+        <tr
+          v-show="_isExpanded(rowIndex)"
+          :key="`expandable-${rowIndex}`">
+          <td :colspan="tableHeadersLength" class="vuetable__expandable-panel">
+            <div class="vuetable__expandable-list">
+              <div
+                v-for="(colKey, colField) in expandableFields"
+                :key="colKey"
+                class="vuetable__expandable-item">
+                <slot :name="colKey">
+                  <span class="vuetable__expandable-label">{{ expandableFields[colField] }}</span>
+                  <span class="vuetable__expandable-value">{{ row[colField] }}</span>
+                </slot>
+              </div>
             </div>
           </td>
         </tr>
@@ -198,27 +216,4 @@ export default {
 </script>
 
 <style scoped>
-table {
-  width: 100%;
-  margin: 0 auto;
-}
-
-caption {
-  text-align: center;
-  background-color: #f1f1f1;
-  font-weight: 700;
-  padding: 10px;
-}
-
-th {
-  background-color: #f2f2f2;
-  text-align: left;
-  padding: 10px;
-}
-
-td {
-  background-color: #f8f8f8;
-  text-align: left;
-  padding: 10px;
-}
 </style>
