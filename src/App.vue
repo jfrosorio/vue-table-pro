@@ -33,6 +33,14 @@ export default {
         'edit_row': 'Edit',
         'delete_row': 'Delete'
       },
+      expandable: {
+        withColumns: ['car_brand', 'car_model', 'car_model_year'],
+        attachFields: {
+          'car_fuel': 'Fuel',
+          'car_doors': 'Doors',
+          'car_seats': 'Seats'
+        }
+      },
       rows: data,
       title: 'Cars List',
       pagination: {
@@ -43,11 +51,6 @@ export default {
       search: {
         placeholder: 'Type your search',
         className: 'vuetable__search-input'
-      },
-      expandable: {
-        'car_fuel': 'Fuel',
-        'car_doors': 'Doors',
-        'car_seats': 'Seats'
       }
     }
   }
