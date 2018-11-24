@@ -27,7 +27,7 @@
 
     <Pagination
         v-if="pagination"
-        :tableData.sync="tableData"
+        :tableData="tableData"
         :perPage="pagination.perPage"
         :size="pagination.size"
         :arrows="pagination.arrows"

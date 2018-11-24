@@ -19,8 +19,8 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "vue": "^2.5.17",
-    "vue-debounce": "^1.0.0"
+    "lodash.debounce": "^4.0.8",
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",

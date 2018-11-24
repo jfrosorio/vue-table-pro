@@ -4,11 +4,13 @@
       :class="className"
       :placeholder="placeholder"
       v-model="value"
-      v-debounce:300="_search"
+      @input="_search"
   >
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 export default {
   name: 'Search',
   props: {
@@ -57,15 +59,18 @@ export default {
       })
     },
     _search () {
-      const needles = this.value.toLowerCase().split('+').map(s => s.trim()).filter(s => s.length)
-      let rows = this.$parent.rows
-      let results = rows
+      debounce(() => {
+        const needles = this.value.toLowerCase().split(' ').map(s => s.trim()).filter(s => s.length)
+        let rows = this.$parent.rows
+        let results = rows
 
-      if (needles.length) {
-        results = this._getFilteredResults(results, needles)
-      }
+        if (needles.length) {
+          results = this._getFilteredResults(results, needles)
+        }
 
-      this.$emit('search', results)
+        console.log(results.length)
+        this.$emit('search', results)
+      }, 300)()
     }
   }
 }
