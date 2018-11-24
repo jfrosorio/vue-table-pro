@@ -30,7 +30,11 @@ export default {
     },
     size: {
       type: Number,
-      default: 5
+      default: 5,
+      validator: function (size) {
+        // Minimum size required for pagination
+        return size >= 4
+      }
     },
     arrows: {
       type: Boolean,
