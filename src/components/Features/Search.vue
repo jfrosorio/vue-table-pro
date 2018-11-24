@@ -68,7 +68,6 @@ export default {
           results = this._getFilteredResults(results, needles)
         }
 
-        console.log(results.length)
         this.$emit('search', results)
       }, 300)()
     }
