@@ -52,6 +52,8 @@
       </tbody>
     </table>
 
+    <slot name="search_empty_results" v-if="!tableData.length"></slot>
+
     <Pagination
         v-if="pagination"
         :tableData.sync="tableData"
