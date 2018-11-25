@@ -10,16 +10,45 @@
     <table>
       <caption>{{ tableTitle }}</caption>
       <thead v-if="tableHeader">
-        <tr>
-          <th v-for="(header, index) in tableHeaders" :key="index">{{ header }}</th>
-        </tr>
+      <tr>
+        <th
+          v-if="expandable"
+          class="vuetable__expandable-header">
+        </th>
+        <th v-for="(header, index) in columns" :key="index">{{ header }}</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, rowIndex) in showData" :key="rowIndex">
-          <td v-for="colKey in _getDisplayableKeys()" :key="colKey">
+      <template v-for="(row, rowIndex) in showData">
+        <tr :key="rowIndex">
+          <td
+            v-if="expandable"
+            @click="_toggleExpandable(rowIndex)"
+            :class="{ 'is-active': _isExpanded(rowIndex) }"
+            class="vuetable__expandable-toggler">
+          </td>
+          <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
           </td>
         </tr>
+        <tr
+          v-show="_isExpanded(rowIndex)"
+          :key="`expandable-${rowIndex}`">
+          <td :colspan="tableHeadersLength" class="vuetable__expandable-panel">
+            <div class="vuetable__expandable-list">
+              <div
+                v-for="(colKey, colField) in expandableFields"
+                :key="colKey"
+                class="vuetable__expandable-item">
+                <slot :name="colKey">
+                  <span class="vuetable__expandable-label">{{ expandableFields[colField] }}</span>
+                  <span class="vuetable__expandable-value">{{ row[colField] }}</span>
+                </slot>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </template>
       </tbody>
     </table>
 
@@ -66,6 +95,13 @@ export default {
     pagination: {
       type: Object,
       default: null
+    },
+    expandable: {
+      type: Object,
+      default: null,
+      validator: obj => {
+        return obj.hasOwnProperty('attachFields') || obj.hasOwnProperty('withColumns')
+      }
     }
   },
   components: {
@@ -75,7 +111,9 @@ export default {
   data () {
     return {
       showData: [],
-      tableData: []
+      tableData: [],
+      expandableFields: {},
+      expandedRows: []
     }
   },
   methods: {
@@ -96,12 +134,12 @@ export default {
      * @returns {Array}
      * @private
      */
-    _getDisplayableKeys () {
+    _getDisplayableKeys (displayableKeys) {
       let attrs = []
       let dataSet = {}
 
-      if (this.columns) {
-        dataSet = this.columns
+      if (displayableKeys) {
+        dataSet = displayableKeys
       } else if (this._hasDataAvailable()) {
         dataSet = this.rows[0]
       }
@@ -128,50 +166,56 @@ export default {
       if (!this.pagination) {
         this._setShowData(data)
       }
+    },
+    _setExpandableFields () {
+      if (!this.expandable) {
+        return
+      }
+
+      const expandWithColumns = Array.isArray(this.expandable.withColumns)
+      const expandAttachedFields = typeof this.expandable.attachFields === 'object'
+
+      if (expandWithColumns) {
+        let customColumns = {}
+        for (const column in this.columns) {
+          if (this.columns.hasOwnProperty(column) && this.expandable.withColumns.includes(column)) {
+            const element = { [column]: this.columns[column] }
+            customColumns = { ...customColumns, ...element }
+          }
+        }
+        this.expandableFields = customColumns
+      }
+
+      if (expandAttachedFields) {
+        this.expandableFields = { ...this.expandableFields, ...this.expandable.attachFields }
+      }
+    },
+    _toggleExpandable (index) {
+      const expandedRowIndex = this.expandedRows.indexOf(index)
+
+      if (expandedRowIndex >= 0) {
+        this.expandedRows.splice(expandedRowIndex, 1)
+      } else {
+        this.expandedRows.push(index)
+      }
+    },
+    _isExpanded (index) {
+      return this.expandedRows.includes(index)
     }
   },
   created () {
     this._setShowData(this.rows)
     this._setTableData(this.rows)
+    this._setExpandableFields()
   },
   computed: {
-    tableHeaders () {
-      let headers = []
-
-      if (this.columns) {
-        for (let key in this.columns) {
-          headers.push(this.columns[key])
-        }
-      }
-
-      return headers
+    tableHeadersLength () {
+      const expandableHeader = this.expandable ? 1 : 0
+      return Object.keys(this.columns).length + expandableHeader
     }
   }
 }
 </script>
 
 <style scoped>
-table {
-  width: 100%;
-  margin: 0 auto;
-}
-
-caption {
-  text-align: center;
-  background-color: #f1f1f1;
-  font-weight: 700;
-  padding: 10px;
-}
-
-th {
-  background-color: #f2f2f2;
-  text-align: left;
-  padding: 10px;
-}
-
-td {
-  background-color: #f8f8f8;
-  text-align: left;
-  padding: 10px;
-}
 </style>

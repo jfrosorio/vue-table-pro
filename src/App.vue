@@ -6,6 +6,7 @@
         :title="title"
         :pagination="pagination"
         :search="search"
+        :expandable="expandable"
     >
       <a slot-scope="extraCol" slot="edit_row">Edit</a>
       <a slot-scope="extraCol" slot="delete_row">Delete</a>
@@ -35,6 +36,15 @@ export default {
         'car_price': 'Price',
         'edit_row': 'Edit',
         'delete_row': 'Delete'
+      },
+      expandable: {
+        withColumns: ['car_brand', 'car_model', 'car_model_year', 'car_price'],
+        attachFields: {
+          'car_fuel': 'Fuel',
+          'car_color': 'Color',
+          'car_doors': 'Doors',
+          'car_seats': 'Seats'
+        }
       },
       rows: data,
       title: 'Cars List',
