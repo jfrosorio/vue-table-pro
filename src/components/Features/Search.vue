@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 export default {
   name: 'Search',
   props: {
@@ -27,27 +29,47 @@ export default {
     }
   },
   methods: {
-    _search () {
-      const needle = this.value.toLowerCase()
-      let rows = this.$parent.rows
+    _getFilteredResults (results, needles) {
+      const fields = this.$parent._getDisplayableKeys()
 
-      const data = rows.filter((row) => {
-        let hasMatch = false
+      return results.filter(row => {
+        let needleMatches = 0
 
-        for (let key of this.$parent._getDisplayableKeys()) {
-          if (row.hasOwnProperty(key)) {
-            const haystack = String(row[key]).toLowerCase()
+        for (let needleIndex = 0; needleIndex < needles.length; needleIndex++) {
+          const currentNeedle = needles[needleIndex].trim()
 
-            hasMatch = haystack.includes(needle)
+          for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+            const field = fields[fieldIndex]
 
-            if (hasMatch) break
+            if (row.hasOwnProperty(field)) {
+              const haystack = String(row[field]).toLowerCase()
+              const madeMatch = haystack.includes(currentNeedle)
+
+              if (madeMatch) {
+                needleMatches++
+                break
+              }
+            }
           }
+
+          if (needleMatches === needleIndex) break
         }
 
-        return hasMatch
+        return needleMatches === needles.length
       })
+    },
+    _search () {
+      debounce(() => {
+        const needles = this.value.toLowerCase().split(' ').map(s => s.trim()).filter(s => s.length)
+        let rows = this.$parent.rows
+        let results = rows
 
-      this.$emit('search', data)
+        if (needles.length) {
+          results = this._getFilteredResults(results, needles)
+        }
+
+        this.$emit('search', results)
+      }, 300)()
     }
   }
 }
