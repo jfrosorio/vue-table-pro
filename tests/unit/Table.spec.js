@@ -7,10 +7,14 @@ describe('Table', () => {
   let tableProps
 
   describe('Without rows', () => {
-    it('does not render', () => {
+    const spy = jest.spyOn(global.console, 'error').mockImplementation(() => {})
+
+    it('does not render and throws console error', () => {
       const wrapper = shallowMount(Table)
 
       expect(wrapper.html()).toBeUndefined()
+      expect(spy).toBeCalled()
+      spy.mockRestore()
     })
   })
 
