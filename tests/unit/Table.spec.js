@@ -6,30 +6,38 @@ import rows from './mock-data/rows.mock'
 describe('Table', () => {
   let tableProps
 
-  beforeEach(() => {
-    tableProps = {
-      rows,
-      caption: "Cars List"
-    }
-  })
-  
-  it('does not exist without rows', () => {
-    const wrapper = shallowMount(Table)
-    expect(wrapper.html()).toBeUndefined()
+  describe('Without rows', () => {
+    it('does not render', () => {
+      const wrapper = shallowMount(Table)
+
+      expect(wrapper.html()).toBeUndefined()
+    })
   })
 
-  it('renders the root element', () => {
-    const wrapper = shallowMount(Table, { propsData: tableProps })
+  describe('With rows', () => {
+    beforeEach(() => {
+      tableProps = {
+        rows
+      }
+    })
 
-    expect(wrapper.html()).toContain('<div class="vuetable">')
-  })
+    it('exists and renders the root element', () => {
+      const wrapper = shallowMount(Table, { propsData: tableProps })
 
-  it('has a caption', () => {
-    const wrapper = shallowMount(Table, { propsData: tableProps })
+      expect(wrapper.html()).toContain('<div class="vuetable">')
+    })
 
-    // Test if the caption exists
-    expect(wrapper.contains('caption')).toBe(true)
-    // Test if the caption text equals the tableTitle prop
-    expect(wrapper.find('caption').text()).toBe('Cars List')
+    describe('With caption', () => {
+      beforeEach(() => {
+        tableProps = { ...tableProps, caption: 'Cars List' }
+      })
+
+      it('exists and renders the caption text', () => {
+        const wrapper = shallowMount(Table, { propsData: tableProps })
+
+        expect(wrapper.contains('caption')).toBe(true)
+        expect(wrapper.find('caption').text()).toBe('Cars List')
+      })
+    })
   })
 })
