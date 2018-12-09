@@ -58,19 +58,18 @@ export default {
         return needleMatches === needles.length
       })
     },
-    _search () {
-      debounce(() => {
-        const needles = this.value.toLowerCase().split(' ').map(s => s.trim()).filter(s => s.length)
-        let rows = this.$parent.rows
-        let results = rows
+    _search: debounce(function () {
+      const needles = this.value.toLowerCase().split(' ').map(s => s.trim()).filter(s => s.length)
+      let rows = this.$parent.rows
+      let results = rows
 
-        if (needles.length) {
-          results = this._getFilteredResults(results, needles)
-        }
+      if (needles.length) {
+        results = this._getFilteredResults(results, needles)
+      }
 
-        this.$emit('search', results)
-      }, 300)()
-    }
+      this.$emit('search', results)
+      this.$root.$emit('madeSearch')
+    }, 300)
   }
 }
 </script>

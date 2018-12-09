@@ -6,6 +6,7 @@
         :title="title"
         :pagination="pagination"
         :search="search"
+        :sortableColumns="sortableColumns"
         :expandable="expandable"
     >
       <a slot-scope="extraCol" slot="edit_row">Edit</a>
@@ -56,7 +57,8 @@ export default {
       search: {
         placeholder: 'Type your search',
         className: 'vuetable__search-input'
-      }
+      },
+      sortableColumns: true
     }
   }
 }

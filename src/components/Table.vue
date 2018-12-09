@@ -12,34 +12,46 @@
       <thead v-if="tableHeader">
       <tr>
         <th
-          v-if="expandable"
-          class="vuetable__expandable-header">
+            v-if="expandable"
+            class="vuetable__expandable-header">
         </th>
-        <th v-for="(header, index) in columns" :key="index">{{ header }}</th>
+        <th v-for="(value, key, index) in columns" :key="index">
+          <SortButton
+              :attribute="key"
+              :tableData="tableData"
+              @sort="_setTableData"
+              v-if="sortableColumns"
+          >
+            {{ value }}
+          </SortButton>
+          <template v-else>
+            {{ value }}
+          </template>
+        </th>
       </tr>
       </thead>
       <tbody>
       <template v-for="(row, rowIndex) in showData">
         <tr :key="rowIndex">
           <td
-            v-if="expandable"
-            @click="_toggleExpandable(rowIndex)"
-            :class="{ 'is-active': _isExpanded(rowIndex) }"
-            class="vuetable__expandable-toggler">
+              v-if="expandable"
+              @click="_toggleExpandable(rowIndex)"
+              :class="{ 'is-active': _isExpanded(rowIndex) }"
+              class="vuetable__expandable-toggler">
           </td>
           <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
           </td>
         </tr>
         <tr
-          v-show="_isExpanded(rowIndex)"
-          :key="`expandable-${rowIndex}`">
+            v-show="_isExpanded(rowIndex)"
+            :key="`expandable-${rowIndex}`">
           <td :colspan="tableHeadersLength" class="vuetable__expandable-panel">
             <div class="vuetable__expandable-list">
               <div
-                v-for="(colKey, colField) in expandableFields"
-                :key="colKey"
-                class="vuetable__expandable-item">
+                  v-for="(colKey, colField) in expandableFields"
+                  :key="colKey"
+                  class="vuetable__expandable-item">
                 <slot :name="colKey">
                   <span class="vuetable__expandable-label">{{ expandableFields[colField] }}</span>
                   <span class="vuetable__expandable-value">{{ row[colField] }}</span>
@@ -68,6 +80,7 @@
 <script>
 import Pagination from '@/components/Features/Pagination'
 import Search from '@/components/Features/Search'
+import SortButton from '@/components/Features/SortButton'
 
 export default {
   name: 'VueTablePro',
@@ -92,6 +105,10 @@ export default {
       type: Object,
       default: null
     },
+    sortableColumns: {
+      type: Boolean,
+      default: true
+    },
     pagination: {
       type: Object,
       default: null
@@ -106,6 +123,7 @@ export default {
   },
   components: {
     Search,
+    SortButton,
     Pagination
   },
   data () {
