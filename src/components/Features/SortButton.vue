@@ -8,12 +8,15 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 export default {
   data () {
     return {
       states: ['initial', 'asc', 'desc'],
       currentStateIndex: 0,
-      initialData: []
+      initialData: [],
+      sortedData: []
     }
   },
   props: {
@@ -37,14 +40,21 @@ export default {
     },
     _sort: function () {
       this._updateStateIndex()
+      this._sortTableData()
+      this._emitSortedData()
+      this._resetPreviousSorted()
+    },
+    _sortTableData () {
+      this.sortedData = this.initialData.slice()
 
-      const state = this._getCurrentState()
-
-      if (state !== 'initial') {
-        this.tableData.sort(this._compareValues)
+      if (this._getCurrentState() !== 'initial') {
+        this.sortedData.sort(this._compareValues)
       }
-
-      this.$emit('sort', state === 'initial' ? this.initialData.slice() : this.tableData)
+    },
+    _emitSortedData () {
+      this.$emit('sort', this.sortedData)
+    },
+    _resetPreviousSorted () {
       this.$root.$emit('resetState', this.attribute)
     },
     _compareValues: function (a, b) {
@@ -70,10 +80,18 @@ export default {
       if (this.currentStateIndex === this.states.length) {
         this.currentStateIndex = 0
       }
+    },
+    _setInitialState () {
+      this.initialData = this.tableData.slice()
     }
   },
   mounted () {
     this.$root.$on('resetState', this._resetState)
+    this.$root.$on('madeSearch', debounce(() => {
+      this._setInitialState()
+      this._sortTableData()
+      this._emitSortedData()
+    }, 150))
   },
   computed: {
     className () {
@@ -81,7 +99,7 @@ export default {
     }
   },
   created () {
-    this.initialData = this.tableData.slice()
+    this._setInitialState()
   }
 }
 </script>

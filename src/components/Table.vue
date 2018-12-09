@@ -18,7 +18,7 @@
         <th v-for="(value, key, index) in columns" :key="index">
           <SortButton
               :attribute="key"
-              :tableData.sync="tableData"
+              :tableData="tableData"
               @sort="_setTableData"
               v-if="sortableColumns"
           >
