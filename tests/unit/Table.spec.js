@@ -4,19 +4,30 @@ import Table from '@/components/Table.vue'
 import rows from './mock-data/rows.mock'
 
 describe('Table', () => {
-  const wrapper = shallowMount(Table, {
-    propsData: {
-      rows
-    }
+  it('does not exist without rows', () => {
+    const wrapper = shallowMount(Table)
+    expect(wrapper.html()).toBeUndefined()
   })
 
-
   it('renders the root element', () => {
+    const wrapper = shallowMount(Table, {
+      propsData: {
+        rows,
+        caption: 'Cars List'
+      }
+    })
+
     expect(wrapper.html()).toContain('<div class="vuetable">')
   })
 
   it('has a caption', () => {
-    wrapper.setProps({ tableTitle: 'Cars List' })
+    const wrapper = shallowMount(Table, {
+      propsData: {
+        rows,
+        caption: 'Cars List'
+      }
+    })
+
     // Test if the caption exists
     expect(wrapper.contains('caption')).toBe(true)
     // Test if the caption text equals the tableTitle prop

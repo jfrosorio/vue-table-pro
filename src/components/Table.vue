@@ -8,7 +8,7 @@
     />
 
     <table>
-      <caption v-if="tableTitle">{{ tableTitle }}</caption>
+      <caption v-if="caption">{{ caption }}</caption>
       <thead v-if="tableHeader">
       <tr>
         <th
@@ -85,7 +85,7 @@ export default {
       type: Boolean,
       default: true
     },
-    tableTitle: {
+    caption: {
       type: String,
       default: null
     },

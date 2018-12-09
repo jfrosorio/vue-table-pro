@@ -3,7 +3,7 @@
     <VueTablePro
         :columns="columns"
         :rows="rows"
-        :title="title"
+        :caption="title"
         :pagination="pagination"
         :search="search"
         :expandable="expandable"
