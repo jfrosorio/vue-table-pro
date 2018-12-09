@@ -197,15 +197,15 @@ export default {
         let customColumns = {}
         for (const column in this.columns) {
           if (this.columns.hasOwnProperty(column) && this.expandable.withColumns.includes(column)) {
-            const element = {[column]: this.columns[column]}
-            customColumns = {...customColumns, ...element}
+            const element = { [column]: this.columns[column] }
+            customColumns = { ...customColumns, ...element }
           }
         }
         this.expandableFields = customColumns
       }
 
       if (expandAttachedFields) {
-        this.expandableFields = {...this.expandableFields, ...this.expandable.attachFields}
+        this.expandableFields = { ...this.expandableFields, ...this.expandable.attachFields }
       }
     },
     _toggleExpandable (index) {
