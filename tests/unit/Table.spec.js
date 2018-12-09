@@ -1,18 +1,20 @@
-import { mount } from '@vue/test-utils'
-import VueTablePro from '@/components/Features.vue'
+import { shallowMount } from '@vue/test-utils'
+import Table from '@/components/Table.vue'
 
-describe('Tests for base table', () => {
-  let wrapper
-  beforeEach(() => {
-    wrapper = mount(VueTablePro, {
-      propsData: {
-        config: {
-          headers: ['name', 'age']
-        }
-      }
-    })
+import rows from './mock-data/rows.mock'
+
+describe('Table', () => {
+  const wrapper = shallowMount(Table, {
+    propsData: {
+      rows
+    }
   })
-  it('displays the correct number of headers', () => {
-    expect(wrapper.vm.config.headers)
+
+  it('renders the correct markup', () => {
+    expect(wrapper.html()).toContain('<div class="vuetable">')
+  })
+
+  it('has a caption', () => {
+    expect(wrapper.contains('caption')).toBe(true)
   })
 })
