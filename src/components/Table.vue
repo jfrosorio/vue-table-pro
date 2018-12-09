@@ -79,7 +79,7 @@ export default {
     rows: {
       type: Array,
       default: null,
-      required: true,
+      required: true
     },
     tableHeader: {
       type: Boolean,
@@ -211,7 +211,7 @@ export default {
   },
   computed: {
     tableHeadersLength () {
-      const columnsLength = this.columns ? Object.keys(this.columns).length : 0;
+      const columnsLength = this.columns ? Object.keys(this.columns).length : 0
       const expandableHeader = this.expandable ? 1 : 0
       return columnsLength + expandableHeader
     }
