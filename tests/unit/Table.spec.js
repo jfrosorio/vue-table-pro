@@ -25,10 +25,10 @@ describe('Table', () => {
       }
     })
 
-    it('exists and renders the root element', () => {
+    it('renders correctly', () => {
       const wrapper = shallowMount(Table, { propsData: tableProps })
 
-      expect(wrapper.html()).toContain('<div class="vuetable">')
+      expect(wrapper.html()).toMatchSnapshot()
     })
 
     describe('With caption', () => {

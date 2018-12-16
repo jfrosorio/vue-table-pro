@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table With rows renders correctly 1`] = `
+<div class="vuetable">
+  <!---->
+  <table>
+    <!---->
+    <thead>
+      <tr>
+        <!---->
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <!---->
+        <td>1</td>
+        <td>BMW</td>
+        <td>3 Series</td>
+        <td>2008</td>
+        <td>Crimson</td>
+        <td>$9760.57</td>
+        <td>petrol</td>
+        <td>5</td>
+        <td>4</td>
+      </tr>
+      <tr style="display: none;">
+        <td colspan="0" class="vuetable__expandable-panel">
+          <div class="vuetable__expandable-list"></div>
+        </td>
+      </tr>
+      <tr>
+        <!---->
+        <td>2</td>
+        <td>Infiniti</td>
+        <td>G</td>
+        <td>1993</td>
+        <td>Red</td>
+        <td>$8684.00</td>
+        <td>diesel</td>
+        <td>3</td>
+        <td>5</td>
+      </tr>
+      <tr style="display: none;">
+        <td colspan="0" class="vuetable__expandable-panel">
+          <div class="vuetable__expandable-list"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!---->
+  <!---->
+</div>
+`;
