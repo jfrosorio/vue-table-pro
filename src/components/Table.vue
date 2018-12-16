@@ -8,7 +8,7 @@
     />
 
     <table>
-      <caption v-show="tableCaption">{{ tableCaption }}</caption>
+      <caption v-if="tableCaption">{{ tableCaption }}</caption>
       <thead v-if="tableHeader">
       <tr>
         <th
