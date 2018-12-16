@@ -3,9 +3,10 @@
     <VueTablePro
         :columns="columns"
         :rows="rows"
-        :caption="title"
+        :tableCaption="tableCaption"
         :pagination="pagination"
         :search="search"
+        :sortableColumns="sortableColumns"
         :expandable="expandable"
     >
       <a slot-scope="extraCol" slot="edit_row">Edit</a>
@@ -46,17 +47,18 @@ export default {
           'car_seats': 'Seats'
         }
       },
-      rows: data,
-      title: 'Cars List',
       pagination: {
         perPage: 15,
         size: 6,
         arrows: true
       },
+      rows: data,
       search: {
         placeholder: 'Type your search',
         className: 'vuetable__search-input'
-      }
+      },
+      sortableColumns: true,
+      tableCaption: 'Cars List'
     }
   }
 }
