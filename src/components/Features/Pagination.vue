@@ -1,5 +1,5 @@
 <template>
-  <div class="vuetable__pagination" v-show="isNecessary">
+  <div class="vuetable__pagination" v-if="hasTableData" v-show="isNecessary">
     <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows && hasMoreUntilFirst" @click="_updatePagination(currentPage - 1)"></a>
     <a class="vuetable__pagination-page" @click="_updatePagination(first)" :class="_isCurrentPage(first)">
       {{ first }}
@@ -22,7 +22,8 @@ export default {
   props: {
     tableData: {
       type: Array,
-      default: () => []
+      default: () => [],
+      required: true
     },
     hasShownData: {
       type: Boolean,
@@ -201,6 +202,11 @@ export default {
       }
 
       this._paginateTableData()
+    }
+  },
+  computed: {
+    hasTableData () {
+      return this.tableData.length > 0
     }
   },
   created () {
