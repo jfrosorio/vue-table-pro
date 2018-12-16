@@ -43,5 +43,31 @@ describe('Table', () => {
         expect(wrapper.find('caption').text()).toBe('Cars List')
       })
     })
+    
+    describe('With expandable', () => {
+      
+      it('renders only with withColumns option', () => {
+        tableProps = { ...tableProps, expandable: { withColumns: ['car_brand', 'car_model'] } }
+        const wrapper = shallowMount(Table, { propsData: tableProps })
+        expect(wrapper.html()).toContain('vuetable__expandable-panel')
+      })
+      
+      it('renders only with attachFields option', () => {
+        tableProps = { ...tableProps, expandable: { attachFields: { 'car_fuel': 'Fuel', 'car_color': 'Color' } } }
+        const wrapper = shallowMount(Table, { propsData: tableProps })
+        expect(wrapper.html()).toContain('vuetable__expandable-panel')
+      })
+      
+      it('expands row when clicked', () => {
+        tableProps = { ...tableProps, expandable: { attachFields: { 'car_fuel': 'Fuel', 'car_color': 'Color' } } }
+        const wrapper = shallowMount(Table, { propsData: tableProps })
+        wrapper.find('.vuetable__expandable-toggler').trigger('click')
+        expect(wrapper.find('.vuetable__expandable-toggler').classes()).toContain('is-active')
+      })
+    })
+    
+    describe('With sortable', () => {
+      
+    })
   })
 })
