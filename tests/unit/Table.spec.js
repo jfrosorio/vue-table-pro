@@ -33,7 +33,7 @@ describe('Table', () => {
 
     describe('With caption', () => {
       beforeEach(() => {
-        tableProps = { ...tableProps, caption: 'Cars List' }
+        tableProps = { ...tableProps, tableCaption: 'Cars List' }
       })
 
       it('exists and renders the caption text', () => {
