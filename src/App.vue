@@ -3,7 +3,7 @@
     <VueTablePro
         :columns="columns"
         :rows="rows"
-        :title="title"
+        :tableCaption="tableCaption"
         :pagination="pagination"
         :search="search"
         :sortableColumns="sortableColumns"
@@ -47,18 +47,18 @@ export default {
           'car_seats': 'Seats'
         }
       },
-      rows: data,
-      title: 'Cars List',
       pagination: {
         perPage: 15,
         size: 6,
         arrows: true
       },
+      rows: data,
       search: {
         placeholder: 'Type your search',
         className: 'vuetable__search-input'
       },
-      sortableColumns: true
+      sortableColumns: true,
+      tableCaption: 'Cars List'
     }
   }
 }
