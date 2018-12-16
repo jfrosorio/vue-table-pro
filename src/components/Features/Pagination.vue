@@ -24,6 +24,10 @@ export default {
       type: Array,
       default: () => []
     },
+    hasShownData: {
+      type: Boolean,
+      default: false
+    },
     perPage: {
       type: Number,
       default: 10
@@ -79,7 +83,6 @@ export default {
       this.last = Math.ceil(this.total / this.perPage)
       this.pagesLength = this.hasMoreUntilLast ? this.pageSize - 1 : this.last - 2
       this.navigationPages = Array.from({ length: this.pagesLength }, (v, k) => k + 2)
-      this.hasShownData = this.$parent.showData.length
 
       if (this.isNecessary) {
         this._paginateTableData()
