@@ -1,5 +1,5 @@
 <template>
-  <div class="vuetable">
+  <div class="vuetable" v-if="rows">
     <Search
         v-if="search"
         :className="search.className"
@@ -91,7 +91,8 @@ export default {
     },
     rows: {
       type: Array,
-      default: null
+      default: null,
+      required: true
     },
     tableHeader: {
       type: Boolean,
@@ -228,8 +229,9 @@ export default {
   },
   computed: {
     tableHeadersLength () {
+      const columnsLength = this.columns ? Object.keys(this.columns).length : 0
       const expandableHeader = this.expandable ? 1 : 0
-      return Object.keys(this.columns).length + expandableHeader
+      return columnsLength + expandableHeader
     }
   }
 }
