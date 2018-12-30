@@ -4,7 +4,7 @@
         v-if="search"
         :className="search.className"
         :placeholder="search.placeholder"
-        @search="_setTableData"
+        @search="$_vueTablePro_setTableData"
     />
 
     <table>
@@ -19,7 +19,7 @@
           <SortButton
               :attribute="key"
               :tableData="tableData"
-              @sort="_setTableData"
+              @sort="$_vueTablePro_setTableData"
               v-if="sortableColumns"
           >
             {{ value }}
@@ -35,18 +35,18 @@
         <tr :key="rowIndex">
           <td
               v-if="expandable"
-              @click="_toggleExpandable(rowIndex)"
-              :class="{ 'is-active': _isExpanded(rowIndex) }"
+              @click="$_vueTablePro_toggleExpandable(rowIndex)"
+              :class="{ 'is-active': $_vueTablePro_isExpanded(rowIndex) }"
               class="vuetablepro__expandable-toggler">
           </td>
-          <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
+          <td v-for="colKey in $_vueTablePro_getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
           </td>
         </tr>
         <tr
-            v-show="_isExpanded(rowIndex)"
+            v-show="$_vueTablePro_isExpanded(rowIndex)"
             :key="`expandable-${rowIndex}`">
-          <td :colspan="tableHeadersLength" class="vuetablepro__expandable-panel">
+          <td :colspan="$_vueTablePro_tableHeadersLength" class="vuetablepro__expandable-panel">
             <div class="vuetablepro__expandable-list">
               <div
                   v-for="(colKey, colField) in expandableFields"
@@ -68,12 +68,12 @@
 
     <Pagination
         v-if="pagination"
-        :tableData="tableData"
+        :$_vueTablePro_tableData="tableData"
         :perPage="pagination.perPage"
         :size="pagination.size"
         :arrows="pagination.arrows"
         :hasShownData="showData.length > 0"
-        @pagination="_setShowData"
+        @pagination="$_vueTablePro_setShowData"
     />
   </div>
 </template>
@@ -144,7 +144,7 @@ export default {
      * @returns {boolean}
      * @private
      */
-    _hasDataAvailable () {
+    $_vueTablePro_hasDataAvailable () {
       return this.rows !== null && typeof this.rows !== 'undefined'
     },
     /**
@@ -154,13 +154,13 @@ export default {
      * @returns {Array}
      * @private
      */
-    _getDisplayableKeys (displayableKeys) {
+    $_vueTablePro_getDisplayableKeys (displayableKeys) {
       let attrs = []
       let dataSet = {}
 
       if (displayableKeys) {
         dataSet = displayableKeys
-      } else if (this._hasDataAvailable()) {
+      } else if (this.$_vueTablePro_hasDataAvailable()) {
         dataSet = this.rows[0]
       }
 
@@ -176,18 +176,18 @@ export default {
      * @param data
      * @private
      */
-    _setShowData (data) {
+    $_vueTablePro_setShowData (data) {
       this.showData = data
     },
-    _setTableData (data) {
+    $_vueTablePro_setTableData (data) {
       this.tableData = data
 
       // If there's no pagination set the show data to all table data
       if (!this.pagination) {
-        this._setShowData(data)
+        this.$_vueTablePro_setShowData(data)
       }
     },
-    _setExpandableFields () {
+    $_vueTablePro_setExpandableFields () {
       if (!this.expandable) {
         return
       }
@@ -210,7 +210,7 @@ export default {
         this.expandableFields = { ...this.expandableFields, ...this.expandable.attachFields }
       }
     },
-    _toggleExpandable (index) {
+    $_vueTablePro_toggleExpandable (index) {
       const expandedRowIndex = this.expandedRows.indexOf(index)
 
       if (expandedRowIndex >= 0) {
@@ -219,17 +219,17 @@ export default {
         this.expandedRows.push(index)
       }
     },
-    _isExpanded (index) {
+    $_vueTablePro_isExpanded (index) {
       return this.expandedRows.includes(index)
     }
   },
   created () {
-    this._setShowData(this.rows)
-    this._setTableData(this.rows)
-    this._setExpandableFields()
+    this.$_vueTablePro_setShowData(this.rows)
+    this.$_vueTablePro_setTableData(this.rows)
+    this.$_vueTablePro_setExpandableFields()
   },
   computed: {
-    tableHeadersLength () {
+    $_vueTablePro_tableHeadersLength () {
       const columnsLength = this.columns ? Object.keys(this.columns).length : 0
       const expandableHeader = this.expandable ? 1 : 0
       return columnsLength + expandableHeader

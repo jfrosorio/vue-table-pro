@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="hasTableData"
+    v-if="$_vueTablePro_hasTableData"
     v-show="isNecessary"
     class="vuetablepro__pagination">
 
@@ -8,12 +8,12 @@
       v-if="arrows"
       v-show="hasMoreUntilFirst"
       class="vuetablepro__pagination-arrow vuetablepro__pagination-arrow--previous"
-      @click="_updatePagination(currentPage - 1)"/>
+      @click="$_vueTablePro_updatePagination(currentPage - 1)"/>
 
     <button
-      :class="_isCurrentPage(first)"
+      :class="$_vueTablePro_isCurrentPage(first)"
       class="vuetablepro__pagination-page"
-      @click="_updatePagination(first)">
+      @click="$_vueTablePro_updatePagination(first)">
       {{ first }}
     </button>
 
@@ -23,10 +23,10 @@
 
     <button
       v-for="page in navigationPages"
-      :class="_isCurrentPage(page)"
+      :class="$_vueTablePro_isCurrentPage(page)"
       :key="page"
       class="vuetablepro__pagination-page"
-      @click="_updatePagination(page)">
+      @click="$_vueTablePro_updatePagination(page)">
       {{ page }}
     </button>
 
@@ -35,9 +35,9 @@
       class="vuetablepro__pagination-ellipsis">...</span>
 
     <button
-      :class="_isCurrentPage(last)"
+      :class="$_vueTablePro_isCurrentPage(last)"
       class="vuetablepro__pagination-page"
-      @click="_updatePagination(last)">
+      @click="$_vueTablePro_updatePagination(last)">
       {{ last }}
     </button>
 
@@ -45,7 +45,7 @@
       v-if="arrows"
       v-show="hasMoreUntilLast"
       class="vuetablepro__pagination-arrow vuetablepro__pagination-arrow--next"
-      @click="_updatePagination(currentPage + 1)"/>
+      @click="$_vueTablePro_updatePagination(currentPage + 1)"/>
   </div>
 </template>
 
@@ -53,7 +53,7 @@
 export default {
   name: 'Pagination',
   props: {
-    tableData: {
+    $_vueTablePro_tableData: {
       type: Array,
       default: () => [],
       required: true
@@ -93,22 +93,22 @@ export default {
     }
   },
   methods: {
-    _paginateTableData () {
+    $_vueTablePro_paginateTableData () {
       // Set paginated data limits
       const end = this.currentPage * this.perPage
       const start = end - this.perPage
 
       // Build paginated data
-      const paginatedData = this.tableData.filter((entry, index) => {
+      const paginatedData = this.$_vueTablePro_tableData.filter((entry, index) => {
         return index >= start && index < end
       })
 
       // Serve paginated data
       this.$emit('pagination', paginatedData)
     },
-    _loadPagination () {
+    $_vueTablePro_loadPagination () {
       // Get table data
-      this.total = this.tableData.length
+      this.total = this.$_vueTablePro_tableData.length
 
       // Set pagination configuration defaults
       this.pageSize = this.size - this.first
@@ -123,22 +123,22 @@ export default {
       this.navigationPages = Array.from({ length: this.pagesLength }, (v, k) => k + 2)
 
       if (this.isNecessary) {
-        this._paginateTableData()
-      } else if (this.tableData.length && !this.hasShownData) {
-        this.$emit('pagination', this.tableData)
+        this.$_vueTablePro_paginateTableData()
+      } else if (this.$_vueTablePro_tableData.length && !this.hasShownData) {
+        this.$emit('pagination', this.$_vueTablePro_tableData)
       }
     },
-    _isCurrentPage (page) {
+    $_vueTablePro_isCurrentPage (page) {
       return page === this.currentPage ? 'vuetablepro__pagination-page--current' : ''
     },
-    _checkIfHasMoreUntilFirst () {
+    $_vueTablePro_checkIfHasMoreUntilFirst () {
       if (this.isFirstItemOfNav && this.currentPage <= this.pageSize) {
         this.hasMoreUntilFirst = false
       } else if (this.isLastItemOfNav || this.currentPage > this.pageSize) {
         this.hasMoreUntilFirst = true
       }
     },
-    _checkIfHasMoreUntilLast () {
+    $_vueTablePro_checkIfHasMoreUntilLast () {
       const remainingPages = this.last - this.currentPage
 
       if (this.isFirstItemOfNav || this.currentPage + this.pageSize < this.last) {
@@ -147,7 +147,7 @@ export default {
         this.hasMoreUntilLast = false
       }
     },
-    _navigateBack () {
+    $_vueTablePro_navigateBack () {
       this.navigationPages = this.navigationPages.map(page => page - (this.pageSize - 2)).filter(page => page > this.first)
       const stepPagesLength = (this.pageSize - 1)
 
@@ -166,7 +166,7 @@ export default {
 
       this.paged--
     },
-    _goToFirstPage () {
+    $_vueTablePro_goToFirstPage () {
       this.hasMoreUntilFirst = false
       this.navigationPages = []
       this.paged = 1
@@ -175,7 +175,7 @@ export default {
         this.navigationPages.push(index)
       }
     },
-    _navigateForwards () {
+    $_vueTablePro_navigateForwards () {
       const startingPoint = this.currentPage
       const endingPoint = startingPoint + (this.pageSize - 1)
       const pointsInterval = endingPoint - startingPoint
@@ -196,7 +196,7 @@ export default {
 
       this.paged++
     },
-    _goToLastPage () {
+    $_vueTablePro_goToLastPage () {
       this.hasMoreUntilLast = false
       this.navigationPages = []
       this.paged = Math.round(this.last / (this.pageSize - 2))
@@ -207,7 +207,7 @@ export default {
         this.navigationPages.unshift(index)
       }
     },
-    _updatePagination (page) {
+    $_vueTablePro_updatePagination (page) {
       if (page < this.first || page > this.last) return
       this.currentPage = page
       this.isFirstItemOfNav = this.currentPage === this.navigationPages[0]
@@ -218,44 +218,44 @@ export default {
       const madePagination = this.paged !== 1
 
       if (this.needsMoreNavigation) {
-        this._checkIfHasMoreUntilFirst()
-        this._checkIfHasMoreUntilLast()
+        this.$_vueTablePro_checkIfHasMoreUntilFirst()
+        this.$_vueTablePro_checkIfHasMoreUntilLast()
 
         if (this.isFirstItemOfNav && madePagination) {
-          this._navigateBack()
+          this.$_vueTablePro_navigateBack()
         }
 
         if (isFirstPage) {
-          this._goToFirstPage()
+          this.$_vueTablePro_goToFirstPage()
         }
 
         if (this.isLastItemOfNav) {
-          this._navigateForwards()
+          this.$_vueTablePro_navigateForwards()
         }
 
         if (isLastPage && this.hasMoreUntilLast) {
-          this._goToLastPage()
+          this.$_vueTablePro_goToLastPage()
         }
       }
 
-      this._paginateTableData()
+      this.$_vueTablePro_paginateTableData()
     }
   },
   computed: {
-    hasTableData () {
-      return this.tableData.length > 0
+    $_vueTablePro_hasTableData () {
+      return this.$_vueTablePro_tableData.length > 0
     }
   },
   created () {
-    this._loadPagination()
+    this.$_vueTablePro_loadPagination()
   },
   watch: {
-    tableData () {
+    $_vueTablePro_tableData () {
       // Reset pagination
-      this._updatePagination(this.first)
+      this.$_vueTablePro_updatePagination(this.first)
 
       // Paginate new data
-      this._loadPagination()
+      this.$_vueTablePro_loadPagination()
     }
   }
 }

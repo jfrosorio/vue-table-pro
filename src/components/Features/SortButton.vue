@@ -1,7 +1,7 @@
 <template>
   <span
-      :class="className"
-      @click="_sort"
+      :class="$_vueTablePro_className"
+      @click="$_vueTablePro_sort"
   >
     <slot></slot>
   </span>
@@ -30,76 +30,76 @@ export default {
     }
   },
   methods: {
-    _resetState (attribute) {
+    $_vueTablePro_resetState (attribute) {
       if (this.attribute !== attribute) {
         this.currentStateIndex = 0
       }
     },
-    _getCurrentState: function () {
+    $_vueTablePro_getCurrentState: function () {
       return this.states[this.currentStateIndex]
     },
-    _sort: function () {
-      this._updateStateIndex()
-      this._sortTableData()
-      this._emitSortedData()
-      this._resetPreviousSorted()
+    $_vueTablePro_sort: function () {
+      this.$_vueTablePro_updateStateIndex()
+      this.$_vueTablePro_sortTableData()
+      this.$_vueTablePro_emitSortedData()
+      this.$_vueTablePro_resetPreviousSorted()
     },
-    _sortTableData () {
+    $_vueTablePro_sortTableData () {
       this.sortedData = this.initialData.slice()
 
-      if (this._getCurrentState() !== 'initial') {
-        this.sortedData.sort(this._compareValues)
+      if (this.$_vueTablePro_getCurrentState() !== 'initial') {
+        this.sortedData.sort(this.$_vueTablePro_compareValues)
       }
     },
-    _emitSortedData () {
+    $_vueTablePro_emitSortedData () {
       this.$emit('sort', this.sortedData)
     },
-    _resetPreviousSorted () {
+    $_vueTablePro_resetPreviousSorted () {
       this.$root.$emit('resetState', this.attribute)
     },
-    _compareValues: function (a, b) {
-      let x = this._sanitize(a[this.attribute])
-      let y = this._sanitize(b[this.attribute])
+    $_vueTablePro_compareValues: function (a, b) {
+      let x = this.$_vueTablePro_sanitize(a[this.attribute])
+      let y = this.$_vueTablePro_sanitize(b[this.attribute])
 
-      if (this._getCurrentState() === 'asc') {
+      if (this.$_vueTablePro_getCurrentState() === 'asc') {
         return (x < y) ? -1 : (x > y) ? 1 : 0
       } else {
         return (x > y) ? -1 : (x < y) ? 1 : 0
       }
     },
-    _sanitize (value) {
+    $_vueTablePro_sanitize (value) {
       if (typeof value === 'string') {
         value = value.toLowerCase()
       }
 
       return value
     },
-    _updateStateIndex: function () {
+    $_vueTablePro_updateStateIndex: function () {
       this.currentStateIndex++
 
       if (this.currentStateIndex === this.states.length) {
         this.currentStateIndex = 0
       }
     },
-    _setInitialState () {
+    $_vueTablePro_setInitialState () {
       this.initialData = this.tableData.slice()
     }
   },
   mounted () {
-    this.$root.$on('resetState', this._resetState)
+    this.$root.$on('resetState', this.$_vueTablePro_resetState)
     this.$root.$on('madeSearch', debounce(() => {
-      this._setInitialState()
-      this._sortTableData()
-      this._emitSortedData()
+      this.$_vueTablePro_setInitialState()
+      this.$_vueTablePro_sortTableData()
+      this.$_vueTablePro_emitSortedData()
     }, 150))
   },
   computed: {
-    className () {
-      return 'vuetablepro__sortable-state--' + this._getCurrentState()
+    $_vueTablePro_className () {
+      return 'vuetablepro_$_vueTablePro_sortable-state--' + this.$_vueTablePro_getCurrentState()
     }
   },
   created () {
-    this._setInitialState()
+    this.$_vueTablePro_setInitialState()
   }
 }
 </script>
