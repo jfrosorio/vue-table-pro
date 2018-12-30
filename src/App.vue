@@ -1,5 +1,5 @@
 <template>
-  <div id="vuetablepro">
+  <div id="vtp-demo">
     <VueTablePro
         :columns="columns"
         :rows="rows"
@@ -24,7 +24,7 @@ import VueTablePro from './components/Table.vue'
 import data from './data/cars'
 
 export default {
-  name: 'app',
+  name: 'vtp-demo',
   components: {
     VueTablePro
   },
@@ -55,7 +55,7 @@ export default {
       rows: data,
       search: {
         placeholder: 'Type your search',
-        className: 'vuetable__search-input'
+        className: 'vuetablepro__search-input'
       },
       sortableColumns: true,
       tableCaption: 'Cars List'
@@ -63,14 +63,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

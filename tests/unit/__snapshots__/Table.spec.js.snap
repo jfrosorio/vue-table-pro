@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Table With rows renders correctly 1`] = `
-<div class="vuetable">
+<div class="vuetablepro">
   <!---->
   <table>
     <!---->
@@ -24,8 +24,8 @@ exports[`Table With rows renders correctly 1`] = `
         <td>4</td>
       </tr>
       <tr style="display: none;">
-        <td colspan="0" class="vuetable__expandable-panel">
-          <div class="vuetable__expandable-list"></div>
+        <td colspan="0" class="vuetablepro__expandable-panel">
+          <div class="vuetablepro__expandable-list"></div>
         </td>
       </tr>
       <tr>
@@ -41,8 +41,8 @@ exports[`Table With rows renders correctly 1`] = `
         <td>5</td>
       </tr>
       <tr style="display: none;">
-        <td colspan="0" class="vuetable__expandable-panel">
-          <div class="vuetable__expandable-list"></div>
+        <td colspan="0" class="vuetablepro__expandable-panel">
+          <div class="vuetablepro__expandable-list"></div>
         </td>
       </tr>
     </tbody>

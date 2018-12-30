@@ -2,41 +2,41 @@
   <div
     v-if="hasTableData"
     v-show="isNecessary"
-    class="vuetable__pagination">
+    class="vuetablepro__pagination">
 
     <button
       v-if="arrows"
       v-show="hasMoreUntilFirst"
-      class="vuetable__pagination-arrow vuetable__pagination-arrow--previous"
+      class="vuetablepro__pagination-arrow vuetablepro__pagination-arrow--previous"
       @click="_updatePagination(currentPage - 1)"/>
 
     <button
       :class="_isCurrentPage(first)"
-      class="vuetable__pagination-page"
+      class="vuetablepro__pagination-page"
       @click="_updatePagination(first)">
       {{ first }}
     </button>
 
     <span
       v-show="hasMoreUntilFirst"
-      class="vuetable__pagination-ellipsis">...</span>
+      class="vuetablepro__pagination-ellipsis">...</span>
 
     <button
       v-for="page in navigationPages"
       :class="_isCurrentPage(page)"
       :key="page"
-      class="vuetable__pagination-page"
+      class="vuetablepro__pagination-page"
       @click="_updatePagination(page)">
       {{ page }}
     </button>
 
     <span
       v-show="hasMoreUntilLast"
-      class="vuetable__pagination-ellipsis">...</span>
+      class="vuetablepro__pagination-ellipsis">...</span>
 
     <button
       :class="_isCurrentPage(last)"
-      class="vuetable__pagination-page"
+      class="vuetablepro__pagination-page"
       @click="_updatePagination(last)">
       {{ last }}
     </button>
@@ -44,7 +44,7 @@
     <button
       v-if="arrows"
       v-show="hasMoreUntilLast"
-      class="vuetable__pagination-arrow vuetable__pagination-arrow--next"
+      class="vuetablepro__pagination-arrow vuetablepro__pagination-arrow--next"
       @click="_updatePagination(currentPage + 1)"/>
   </div>
 </template>
@@ -129,7 +129,7 @@ export default {
       }
     },
     _isCurrentPage (page) {
-      return page === this.currentPage ? 'vuetable__pagination-page--current' : ''
+      return page === this.currentPage ? 'vuetablepro__pagination-page--current' : ''
     },
     _checkIfHasMoreUntilFirst () {
       if (this.isFirstItemOfNav && this.currentPage <= this.pageSize) {
@@ -260,91 +260,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.vuetable__pagination {
-  margin: 20px auto;
-  user-select: none;
-}
-
-.vuetable__pagination-page {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  margin: 0 10px;
-  background-color: #E1E8ED;
-  font-size: 17px;
-  line-height: 40px;
-  color: #66757F;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
-}
-
-.vuetable__pagination-page:not(.vuetable__pagination-page--current):hover {
-  background-color: #CCD6DD;
-}
-
-.vuetable__pagination-page--current {
-  background-color: #607D8B;
-  color: #F5F8FA;
-}
-
-.vuetable__pagination-ellipsis {
-  display: inline-block;
-  height: 40px;
-  font-size: 22px;
-  line-height: 27px;
-  letter-spacing: 1px;
-  vertical-align: top;
-  color: #66757F;
-}
-
-.vuetable__pagination-arrow {
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  width: 40px;
-  height: 40px;
-  margin: 0 10px;
-  background-color: #e1e8ed;
-  font-size: 17px;
-  line-height: 40px;
-  color: #66757F;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
-
-  &::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 10px;
-    height: 10px;
-    margin: auto;
-    border: solid #607d8b;
-    border-width: 0 2px 2px 0;
-    content: '';
-  }
-
-  &:hover {
-    background-color: #607D8B;
-
-    &::before {
-      border-color: #F5F8FA;
-    }
-  }
-}
-
-.vuetable__pagination-arrow--previous::before {
-  left: 17px;
-  transform: rotate(135deg);
-}
-
-.vuetable__pagination-arrow--next::before {
-  left: 11px;
-  transform: rotate(-45deg);
-}
-</style>

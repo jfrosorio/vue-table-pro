@@ -43,25 +43,24 @@ describe('Table', () => {
         expect(wrapper.find('caption').text()).toBe('Cars List')
       })
     })
-    
+
     describe('With expandable', () => {
-      
       it('renders only with withColumns option', () => {
         const wrapper = shallowMount(Table, { propsData: tableProps })
-        wrapper.setProps( { expandable: { withColumns: ['car_brand', 'car_model'] } } )
-        expect(wrapper.html()).toContain('vuetable__expandable-panel')
+        wrapper.setProps({ expandable: { withColumns: ['car_brand', 'car_model'] } })
+        expect(wrapper.html()).toContain('vuetablepro__expandable-panel')
       })
-      
+
       it('renders only with attachFields option', () => {
         const wrapper = shallowMount(Table, { propsData: tableProps })
-        expect(wrapper.html()).toContain('vuetable__expandable-panel')
+        expect(wrapper.html()).toContain('vuetablepro__expandable-panel')
       })
-      
+
       it('expands row when clicked', () => {
         const wrapper = shallowMount(Table, { propsData: tableProps })
-        wrapper.setProps( { expandable: { attachFields: { 'car_fuel': 'Fuel', 'car_color': 'Color' } } } )
-        wrapper.find('.vuetable__expandable-toggler').trigger('click')
-        expect(wrapper.find('.vuetable__expandable-toggler').classes()).toContain('is-active')
+        wrapper.setProps({ expandable: { attachFields: { 'car_fuel': 'Fuel', 'car_color': 'Color' } } })
+        wrapper.find('.vuetablepro__expandable-toggler').trigger('click')
+        expect(wrapper.find('.vuetablepro__expandable-toggler').classes()).toContain('is-active')
       })
     })
   })

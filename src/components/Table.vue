@@ -1,5 +1,5 @@
 <template>
-  <div class="vuetable" v-if="rows">
+  <div class="vuetablepro" v-if="rows">
     <Search
         v-if="search"
         :className="search.className"
@@ -13,7 +13,7 @@
       <tr>
         <th
             v-if="expandable"
-            class="vuetable__expandable-header">
+            class="vuetablepro__expandable-header">
         </th>
         <th v-for="(value, key, index) in columns" :key="index">
           <SortButton
@@ -37,7 +37,7 @@
               v-if="expandable"
               @click="_toggleExpandable(rowIndex)"
               :class="{ 'is-active': _isExpanded(rowIndex) }"
-              class="vuetable__expandable-toggler">
+              class="vuetablepro__expandable-toggler">
           </td>
           <td v-for="colKey in _getDisplayableKeys(columns)" :key="colKey">
             <slot :name="colKey">{{ row[colKey] }}</slot>
@@ -46,15 +46,15 @@
         <tr
             v-show="_isExpanded(rowIndex)"
             :key="`expandable-${rowIndex}`">
-          <td :colspan="tableHeadersLength" class="vuetable__expandable-panel">
-            <div class="vuetable__expandable-list">
+          <td :colspan="tableHeadersLength" class="vuetablepro__expandable-panel">
+            <div class="vuetablepro__expandable-list">
               <div
                   v-for="(colKey, colField) in expandableFields"
                   :key="colKey"
-                  class="vuetable__expandable-item">
+                  class="vuetablepro__expandable-item">
                 <slot :name="colKey">
-                  <span class="vuetable__expandable-label">{{ expandableFields[colField] }}</span>
-                  <span class="vuetable__expandable-value">{{ row[colField] }}</span>
+                  <span class="vuetablepro__expandable-label">{{ expandableFields[colField] }}</span>
+                  <span class="vuetablepro__expandable-value">{{ row[colField] }}</span>
                 </slot>
               </div>
             </div>
@@ -237,6 +237,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
