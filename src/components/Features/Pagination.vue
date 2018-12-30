@@ -1,18 +1,51 @@
 <template>
-  <div class="vuetable__pagination" v-show="isNecessary">
-    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--previous" v-if="arrows && hasMoreUntilFirst" @click="_updatePagination(currentPage - 1)"></a>
-    <a class="vuetable__pagination-page" @click="_updatePagination(first)" :class="_isCurrentPage(first)">
+  <div
+    v-if="hasTableData"
+    v-show="isNecessary"
+    class="vuetable__pagination">
+
+    <button
+      v-if="arrows"
+      v-show="hasMoreUntilFirst"
+      class="vuetable__pagination-arrow vuetable__pagination-arrow--previous"
+      @click="_updatePagination(currentPage - 1)"/>
+
+    <button
+      :class="_isCurrentPage(first)"
+      class="vuetable__pagination-page"
+      @click="_updatePagination(first)">
       {{ first }}
-    </a>
-    <span class="vuetable__pagination-ellipsis" v-show="hasMoreUntilFirst">...</span>
-    <a class="vuetable__pagination-page" @click="_updatePagination(page)" :class="_isCurrentPage(page)" v-for="page in navigationPages" :key="page">
+    </button>
+
+    <span
+      v-show="hasMoreUntilFirst"
+      class="vuetable__pagination-ellipsis">...</span>
+
+    <button
+      v-for="page in navigationPages"
+      :class="_isCurrentPage(page)"
+      :key="page"
+      class="vuetable__pagination-page"
+      @click="_updatePagination(page)">
       {{ page }}
-    </a>
-    <span class="vuetable__pagination-ellipsis" v-show="hasMoreUntilLast">...</span>
-    <a class="vuetable__pagination-page" @click="_updatePagination(last)" :class="_isCurrentPage(last)">
+    </button>
+
+    <span
+      v-show="hasMoreUntilLast"
+      class="vuetable__pagination-ellipsis">...</span>
+
+    <button
+      :class="_isCurrentPage(last)"
+      class="vuetable__pagination-page"
+      @click="_updatePagination(last)">
       {{ last }}
-    </a>
-    <a class="vuetable__pagination-arrow vuetable__pagination-arrow--next" v-if="arrows && hasMoreUntilLast" @click="_updatePagination(currentPage + 1)"></a>
+    </button>
+
+    <button
+      v-if="arrows"
+      v-show="hasMoreUntilLast"
+      class="vuetable__pagination-arrow vuetable__pagination-arrow--next"
+      @click="_updatePagination(currentPage + 1)"/>
   </div>
 </template>
 
@@ -22,11 +55,20 @@ export default {
   props: {
     tableData: {
       type: Array,
-      default: () => []
+      default: () => [],
+      required: true
+    },
+    hasShownData: {
+      type: Boolean,
+      default: false
     },
     perPage: {
       type: Number,
-      default: 10
+      default: 10,
+      validator: function (perPage) {
+        // Minimum rows required for pagination
+        return perPage > 0
+      }
     },
     size: {
       type: Number,
@@ -79,7 +121,6 @@ export default {
       this.last = Math.ceil(this.total / this.perPage)
       this.pagesLength = this.hasMoreUntilLast ? this.pageSize - 1 : this.last - 2
       this.navigationPages = Array.from({ length: this.pagesLength }, (v, k) => k + 2)
-      this.hasShownData = this.$parent.showData.length
 
       if (this.isNecessary) {
         this._paginateTableData()
@@ -200,6 +241,11 @@ export default {
       this._paginateTableData()
     }
   },
+  computed: {
+    hasTableData () {
+      return this.tableData.length > 0
+    }
+  },
   created () {
     this._loadPagination()
   },
@@ -230,6 +276,7 @@ export default {
   font-size: 17px;
   line-height: 40px;
   color: #66757F;
+  border: none;
   border-radius: 3px;
   cursor: pointer;
   box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
@@ -265,6 +312,7 @@ export default {
   font-size: 17px;
   line-height: 40px;
   color: #66757F;
+  border: none;
   border-radius: 3px;
   cursor: pointer;
   box-shadow: 0 0px 1px rgba(0, 0, 0, .4);

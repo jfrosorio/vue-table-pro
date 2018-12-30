@@ -72,6 +72,7 @@
         :perPage="pagination.perPage"
         :size="pagination.size"
         :arrows="pagination.arrows"
+        :hasShownData="showData.length > 0"
         @pagination="_setShowData"
     />
   </div>
