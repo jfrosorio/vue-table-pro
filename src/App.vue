@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="vuetablepro">
     <VueTablePro
         :columns="columns"
         :rows="rows"
@@ -9,8 +9,8 @@
         :sortableColumns="sortableColumns"
         :expandable="expandable"
     >
-      <a slot-scope="extraCol" slot="edit_row">Edit</a>
-      <a slot-scope="extraCol" slot="delete_row">Delete</a>
+      <a slot="edit_row">Edit</a>
+      <a slot="delete_row">Delete</a>
 
       <div slot="search_empty_results">
         <p>No results found.</p>
