@@ -27,7 +27,7 @@ describe('Pagination', () => {
     })
 
     it('renders the root element', () => {
-      expect(wrapper.classes()).toContain('vuetable__pagination')
+      expect(wrapper.classes()).toContain('vuetablepro__pagination')
     })
 
     describe('With insufficient rows to paginate', () => {
@@ -57,13 +57,13 @@ describe('Pagination', () => {
       })
 
       it('has two pages', () => {
-        expect(wrapper.findAll('.vuetable__pagination-page').length).toBe(2)
+        expect(wrapper.findAll('.vuetablepro__pagination-page').length).toBe(2)
       })
 
       it('sets the second page as current upon click', () => {
-        const secondPage = wrapper.findAll('.vuetable__pagination-page').at(1)
+        const secondPage = wrapper.findAll('.vuetablepro__pagination-page').at(1)
         secondPage.trigger('click')
-        expect(secondPage.classes()).toContain('vuetable__pagination-page--current')
+        expect(secondPage.classes()).toContain('vuetablepro__pagination-page--current')
         expect(wrapper.vm.currentPage).toBe(2)
       })
 
@@ -75,13 +75,13 @@ describe('Pagination', () => {
         })
 
         it('renders both "previous" and "next" arrows', () => {
-          expect(wrapper.find('.vuetable__pagination-arrow--previous').exists()).toBe(true)
-          expect(wrapper.find('.vuetable__pagination-arrow--next').exists()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--previous').exists()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--next').exists()).toBe(true)
         })
 
         it('hides both "previous" and "next" arrows', () => {
-          expect(wrapper.find('.vuetable__pagination-arrow--previous').isVisible()).toBe(false)
-          expect(wrapper.find('.vuetable__pagination-arrow--next').isVisible()).toBe(false)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--previous').isVisible()).toBe(false)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--next').isVisible()).toBe(false)
         })
       })
     })
@@ -126,7 +126,7 @@ describe('Pagination', () => {
         })
 
         it('has two pages', () => {
-          expect(wrapper.findAll('.vuetable__pagination-page').length).toBe(2)
+          expect(wrapper.findAll('.vuetablepro__pagination-page').length).toBe(2)
         })
       })
       describe('Size 20', () => {
@@ -137,7 +137,7 @@ describe('Pagination', () => {
         })
 
         it('has two pages', () => {
-          expect(wrapper.findAll('.vuetable__pagination-page').length).toBe(2)
+          expect(wrapper.findAll('.vuetablepro__pagination-page').length).toBe(2)
         })
       })
     })
@@ -172,13 +172,13 @@ describe('Pagination', () => {
       })
 
       it('has 5 pages', () => {
-        expect(wrapper.findAll('.vuetable__pagination-page').length).toBe(5)
+        expect(wrapper.findAll('.vuetablepro__pagination-page').length).toBe(5)
       })
 
       it('sets the last page as current upon click', () => {
-        const lastPage = wrapper.findAll('.vuetable__pagination-page').at(4)
+        const lastPage = wrapper.findAll('.vuetablepro__pagination-page').at(4)
         lastPage.trigger('click')
-        expect(lastPage.classes()).toContain('vuetable__pagination-page--current')
+        expect(lastPage.classes()).toContain('vuetablepro__pagination-page--current')
         expect(wrapper.vm.currentPage).toBe(12)
       })
 
@@ -190,33 +190,33 @@ describe('Pagination', () => {
         })
 
         it('renders both "previous" and "next" arrows', () => {
-          expect(wrapper.find('.vuetable__pagination-arrow--previous').exists()).toBe(true)
-          expect(wrapper.find('.vuetable__pagination-arrow--next').exists()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--previous').exists()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--next').exists()).toBe(true)
         })
 
         it('hides "previous" arrow', () => {
-          expect(wrapper.find('.vuetable__pagination-arrow--previous').isVisible()).toBe(false)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--previous').isVisible()).toBe(false)
         })
 
         it('shows "next" arrow', () => {
-          expect(wrapper.find('.vuetable__pagination-arrow--next').isVisible()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--next').isVisible()).toBe(true)
         })
 
         it('shows "previous" arrow when there\'s more pages until the first', () => {
-          const page = wrapper.findAll('.vuetable__pagination-page').at(3)
+          const page = wrapper.findAll('.vuetablepro__pagination-page').at(3)
           page.trigger('click')
-          expect(wrapper.find('.vuetable__pagination-arrow--previous').isVisible()).toBe(true)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--previous').isVisible()).toBe(true)
         })
 
         it('hides "next" arrow when there\'s no more pages until the last', () => {
-          const page = wrapper.findAll('.vuetable__pagination-page').at(4)
+          const page = wrapper.findAll('.vuetablepro__pagination-page').at(4)
           page.trigger('click')
-          expect(wrapper.find('.vuetable__pagination-arrow--next').isVisible()).toBe(false)
+          expect(wrapper.find('.vuetablepro__pagination-arrow--next').isVisible()).toBe(false)
         })
 
         it('emits pagination when clicking the previous arrow', () => {
-          const page = wrapper.findAll('.vuetable__pagination-page').at(3)
-          const arrow = wrapper.find('.vuetable__pagination-arrow--next')
+          const page = wrapper.findAll('.vuetablepro__pagination-page').at(3)
+          const arrow = wrapper.find('.vuetablepro__pagination-arrow--next')
           page.trigger('click')
           expect(wrapper.emitted().pagination.length).toBe(2)
           arrow.trigger('click')
@@ -224,7 +224,7 @@ describe('Pagination', () => {
         })
 
         it('emits pagination when clicking the next arrow', () => {
-          const arrow = wrapper.find('.vuetable__pagination-arrow--next')
+          const arrow = wrapper.find('.vuetablepro__pagination-arrow--next')
           const currentEmitted = wrapper.emitted().pagination.length
           arrow.trigger('click')
           expect(wrapper.emitted().pagination.length).toBe(currentEmitted + 1)
@@ -244,13 +244,13 @@ describe('Pagination', () => {
       })
 
       it('has 5 pages', () => {
-        expect(wrapper.findAll('.vuetable__pagination-page').length).toBe(5)
+        expect(wrapper.findAll('.vuetablepro__pagination-page').length).toBe(5)
       })
 
       it('sets the last page as current upon click', () => {
-        const lastPage = wrapper.findAll('.vuetable__pagination-page').at(4)
+        const lastPage = wrapper.findAll('.vuetablepro__pagination-page').at(4)
         lastPage.trigger('click')
-        expect(lastPage.classes()).toContain('vuetable__pagination-page--current')
+        expect(lastPage.classes()).toContain('vuetablepro__pagination-page--current')
         expect(wrapper.vm.currentPage).toBe(5)
       })
     })

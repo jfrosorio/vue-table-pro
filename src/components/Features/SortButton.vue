@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     className () {
-      return 'vuetable__sortable-state--' + this._getCurrentState()
+      return 'vuetablepro__sortable-state--' + this._getCurrentState()
     }
   },
   created () {

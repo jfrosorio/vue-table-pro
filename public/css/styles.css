@@ -1,133 +1,232 @@
-.container {
-    width: 80%;
-    margin: auto;
+/*== Demo styles
+ */
+#vtp-demo {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 
-table {
-    width: 100%;
-    margin: 0 auto;
-    /* The main benefit of table-layout: fixed; is that the table renders much faster. */
-    table-layout: fixed;
+#vtp-demo table {
+  width: 100%;
+  margin: 0 auto;
+  /* The main benefit of table-layout: fixed; is that the table renders much faster. */
+  table-layout: fixed;
 }
 
-caption {
-    text-align: center;
-    background-color: #f1f1f1;
-    font-weight: 700;
-    padding: 10px;
+#vtp-demo caption {
+  text-align: center;
+  background-color: #f1f1f1;
+  font-weight: 700;
+  padding: 10px;
 }
 
-th {
-    background-color: #f2f2f2;
-    text-align: left;
-    padding: 10px;
+#vtp-demo th {
+  background-color: #f2f2f2;
+  text-align: left;
+  padding: 10px;
 }
 
-td {
-    background-color: #f8f8f8;
-    text-align: left;
-    padding: 10px;
+#vtp-demo td {
+  background-color: #f8f8f8;
+  text-align: left;
+  padding: 10px;
+}
+
+.vtp-container {
+  width: 80%;
+  margin: auto;
 }
 
 /*== Search input
  */
-.vuetable__search-input {
-    width: 100%;
-    height: 3em;
-    margin-bottom: 30px;
-    padding: 4px 15px;
-    box-sizing: border-box;
+.vuetablepro__search-input {
+  width: 100%;
+  height: 3em;
+  margin-bottom: 30px;
+  padding: 4px 15px;
+  box-sizing: border-box;
 }
 
 /*== Expandable Rows
  */
-.vuetable__expandable-header {
-    width: 30px;
+.vuetablepro__expandable-header {
+  width: 30px;
 }
 
-.vuetable__expandable-toggler {
-    position: relative;
-    cursor: pointer;
-    user-select: none;
+.vuetablepro__expandable-toggler {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
 }
 
-.vuetable__expandable-toggler::before {
-    content: '+';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+.vuetablepro__expandable-toggler::before {
+  content: '+';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 
-    width: 20px;
-    height: 20px;
-    margin: auto;
+  width: 20px;
+  height: 20px;
+  margin: auto;
 
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    text-align: center;
-    color: #66757F;
-    background-color: #E1E8ED;
-    border-radius: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  color: #66757F;
+  background-color: #E1E8ED;
+  border-radius: 100%;
 }
 
-.vuetable__expandable-toggler:hover::before {
-    background-color: #CCD6DD;
+.vuetablepro__expandable-toggler:hover::before {
+  background-color: #CCD6DD;
 }
 
-.vuetable__expandable-toggler.is-active::before {
-    content: '-';
-    background-color: #607D8B;
-    color: #F5F8FA;
+.vuetablepro__expandable-toggler.is-active::before {
+  content: '-';
+  background-color: #607D8B;
+  color: #F5F8FA;
 }
 
-.vuetable__expandable-panel {
-    background-color: #F5F8FA;
+.vuetablepro__expandable-panel {
+  background-color: #F5F8FA;
 }
 
-.vuetable__expandable-list {
-    display: flex;
-    flex-flow: row wrap;
-    padding: 20px 40px;
+.vuetablepro__expandable-list {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 20px 40px;
 }
 
-.vuetable__expandable-item {
-    flex: 1 0 25%;
+.vuetablepro__expandable-item {
+  flex: 1 0 25%;
 }
 
-.vuetable__expandable-item:nth-child(n+5) {
-    margin-top: 30px;
+.vuetablepro__expandable-item:nth-child(n+5) {
+  margin-top: 30px;
 }
 
-.vuetable__expandable-label {
-    font-size: 12px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: #66757F;
+.vuetablepro__expandable-label {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #66757F;
 }
 
-.vuetable__expandable-value {
-    display: block;
-    margin-top: 3px;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 24px;
-    letter-spacing: 0.2px;
-    text-transform: capitalize;
+.vuetablepro__expandable-value {
+  display: block;
+  margin-top: 3px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+  text-transform: capitalize;
 }
 
 /*== Sortable columns
  */
-.vuetable__sortable-state::after {
-    content: '';
-    display: inline-block;
+.vuetablepro__sortable-state::after {
+  content: '';
+  display: inline-block;
 }
 
-.vuetable__sortable-state--asc::after {
-    content: '\2191';
+.vuetablepro__sortable-state--asc::after {
+  content: '\2191';
 }
 
-.vuetable__sortable-state--desc::after {
-    content: '\2193';
+.vuetablepro__sortable-state--desc::after {
+  content: '\2193';
+}
+
+/*== Pagination
+ */
+.vuetablepro__pagination {
+  margin: 20px auto;
+  user-select: none;
+}
+
+.vuetablepro__pagination-page {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  background-color: #E1E8ED;
+  font-size: 17px;
+  line-height: 40px;
+  color: #66757F;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
+}
+
+.vuetablepro__pagination-page:not(.vuetablepro__pagination-page--current):hover {
+  background-color: #CCD6DD;
+}
+
+.vuetablepro__pagination-page--current {
+  background-color: #607D8B;
+  color: #F5F8FA;
+}
+
+.vuetablepro__pagination-ellipsis {
+  display: inline-block;
+  height: 40px;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: 1px;
+  vertical-align: top;
+  color: #66757F;
+}
+
+.vuetablepro__pagination-arrow {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  background-color: #e1e8ed;
+  font-size: 17px;
+  line-height: 40px;
+  color: #66757F;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 0px 1px rgba(0, 0, 0, .4);
+}
+
+.vuetablepro__pagination-arrow::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  margin: auto;
+  border: solid #607d8b;
+  border-width: 0 2px 2px 0;
+  content: '';
+}
+
+.vuetablepro__pagination-arrow:hover {
+  background-color: #607D8B;
+}
+
+.vuetablepro__pagination-arrow:hover::before {
+  border-color: #F5F8FA;
+}
+
+.vuetablepro__pagination-arrow--previous::before {
+  left: 17px;
+  transform: rotate(135deg);
+}
+
+.vuetablepro__pagination-arrow--next::before {
+  left: 11px;
+  transform: rotate(-45deg);
 }
