@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Table from '@/components/Table.vue'
+import Table from '@/components/VueTablePro.vue'
 
 import rows from './mock-data/rows.mock'
 

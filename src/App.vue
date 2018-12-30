@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import VueTablePro from './components/Table.vue'
+import VueTablePro from './components/VueTablePro.vue'
 import data from './data/cars'
 
 export default {

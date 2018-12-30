@@ -1,12 +1,15 @@
-import Vue from 'vue'
-import VueTablePro from './Table.vue'
+import VueTablePro from './components/VueTablePro.vue'
 
-const Components = {
-  VueTablePro
+const VueTableProPlugin = {
+  install (Vue, options) {
+    Vue.component(VueTablePro.name, VueTablePro)
+  }
 }
 
-Object.keys(Components).forEach(name => {
-  Vue.component(name, Components[name])
-})
+// Automatic installation if Vue has been added to the global scope.
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VueTableProPlugin)
+}
 
-export default Components
+export default VueTableProPlugin
+export { VueTablePro }

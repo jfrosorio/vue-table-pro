@@ -79,9 +79,9 @@
 </template>
 
 <script>
-import Pagination from '@/components/Features/Pagination'
-import Search from '@/components/Features/Search'
-import SortButton from '@/components/Features/SortButton'
+import Pagination from '@/components/VueTableProPagination'
+import Search from '@/components/VueTableProSearch'
+import SortButton from '@/components/VueTableProSortButton'
 
 export default {
   name: 'VueTablePro',
