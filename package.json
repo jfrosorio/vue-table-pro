@@ -1,7 +1,7 @@
 {
   "name": "vue-table-pro",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "author": "José Osório",
   "main": "./dist/VueTablePro.common.js",
   "files": [
