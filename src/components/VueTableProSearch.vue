@@ -4,7 +4,7 @@
       :class="className"
       :placeholder="placeholder"
       v-model="value"
-      @input="_search"
+      @input="$_vueTablePro_search"
   >
 </template>
 
@@ -29,8 +29,8 @@ export default {
     }
   },
   methods: {
-    _getFilteredResults (results, needles) {
-      const fields = this.$parent._getDisplayableKeys()
+    $_vueTablePro_getFilteredResults (results, needles) {
+      const fields = this.$parent.$_vueTablePro_getDisplayableKeys()
 
       return results.filter(row => {
         let needleMatches = 0
@@ -58,13 +58,13 @@ export default {
         return needleMatches === needles.length
       })
     },
-    _search: debounce(function () {
+    $_vueTablePro_search: debounce(function () {
       const needles = this.value.toLowerCase().split(' ').map(s => s.trim()).filter(s => s.length)
       let rows = this.$parent.rows
       let results = rows
 
       if (needles.length) {
-        results = this._getFilteredResults(results, needles)
+        results = this.$_vueTablePro_getFilteredResults(results, needles)
       }
 
       this.$emit('search', results)

@@ -22,7 +22,7 @@ describe('Pagination', () => {
   describe('With table data - 5 rows', () => {
     let wrapper
     beforeEach(() => {
-      paginationProps = { ...paginationProps, tableData: fewRows }
+      paginationProps = { ...paginationProps, $_vueTablePro_tableData: fewRows }
       wrapper = mount(Pagination, { propsData: paginationProps })
     })
 
@@ -146,7 +146,7 @@ describe('Pagination', () => {
   describe('With table data - 60 rows', () => {
     let wrapper
     beforeEach(() => {
-      paginationProps = { ...paginationProps, size: 5, tableData: lotsOfRows }
+      paginationProps = { ...paginationProps, size: 5, $_vueTablePro_tableData: lotsOfRows }
       wrapper = mount(Pagination, { propsData: paginationProps })
     })
 
