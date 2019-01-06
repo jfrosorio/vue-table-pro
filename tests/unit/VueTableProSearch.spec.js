@@ -1,5 +1,5 @@
 import {mount} from '@vue/test-utils'
-import Search from '@/components/Features/Search'
+import Search from '@/components/VueTableProSearch'
 
 describe('Search', () => {
   const wrapper = mount(Search)

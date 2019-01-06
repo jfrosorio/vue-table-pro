@@ -1,5 +1,5 @@
 import {mount} from '@vue/test-utils'
-import SortButton from '@/components/Features/SortButton'
+import SortButton from '@/components/VueTableProSortButton'
 
 describe('Sort Button', () => {
   const wrapper = mount(SortButton)
