@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Pagination from '@/components/Features/Pagination.vue'
+import Pagination from '@/components/VueTableProPagination.vue'
 
 import fewRows from './mock-data/pagination/few-rows.mock'
 import lotsOfRows from './mock-data/pagination/lots-of-rows.mock'
