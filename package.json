@@ -1,6 +1,8 @@
 {
   "name": "vue-table-pro",
+  "description": "A Vue component for rendering tables with your datasets.",
   "version": "0.1.0",
+  "license": "MIT",
   "private": false,
   "author": "José Osório",
   "main": "./dist/VueTablePro.common.js",
@@ -10,6 +12,13 @@
     "public/*",
     "*.json",
     "*.js"
+  ],
+  "keywords": [
+    "vuejs",
+    "html5",
+    "es6",
+    "table",
+    "dataset"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
