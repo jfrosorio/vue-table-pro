@@ -1,4 +1,4 @@
-import VueTablePro from './components/VueTablePro.vue'
+import VueTablePro from './VueTablePro.vue'
 
 const VueTableProPlugin = {
   install (Vue, options) {

@@ -5,10 +5,14 @@
   "license": "MIT",
   "private": false,
   "author": "José Osório",
+  "contributors": [
+    "Francisco Pereira",
+    "Miguel Teixeira"
+  ],
   "main": "./dist/VueTablePro.common.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jfrosorio/vueTablePro"
+    "url": "git+https://github.com/jfrosorio/vue-table-pro"
   },
   "files": [
     "dist/*",
