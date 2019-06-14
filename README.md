@@ -31,7 +31,7 @@ Vue.use(VueTablePro)
 Include VueTablePro in your Vue components
 ```html
 <template>
-  <VueTablePro :rows="tableData"></VueTablePro>
+  <VueTablePro :rows="tableData">
 </template>
 
 <script>
@@ -39,39 +39,19 @@ export default {
   data() {
     return {
       tableData: [
-        { name: "Patrick", age: 31 },
-        { name: "Theresa", age: 25 },
-        { name: "Bill", age: 19 },
-        { name: "Jane", age: 44 }
+        {
+          name: "John Doe",
+          age: 21
+        },
+        {
+          name: "Jane Doe",
+          age: 21
+        }
       ]
     }
   }
 }
 </script>
-```
-
-Or use it directly in your pages
-```html
-<!-- HTML file -->
-
-<div id="people">
-  <vue-table-pro :rows="tableData"></vue-table-pro>
-</div>
-```
-```javascript
-// main.js file
-
-new Vue({
-    el: "#people",
-    data: {
-        tableData: [
-            { name: "Patrick", age: 31 },
-            { name: "Theresa", age: 25 },
-            { name: "Bill", age: 19 },
-            { name: "Jane", age: 44 }
-        ]
-    }
-});
 ```
 
 ---
